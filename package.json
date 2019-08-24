@@ -1,23 +1,28 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "name": "unofficial-youtube-music-app",
+  "productName": "YouTube Music App",
+  "version": "0.1.0",
+  "description": "Desktop app built with electron for the YT Music service.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . electron-tutorial-app --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"YouTube Music App\"",    
+    "package-linux": "electron-packager . electron-tutorial-app --overwrite --platform=linux --arch=x64 --icon=assets/icons/png/icon.png --prune=true --out=release-builds"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/DM164/Unoffical-YouTube-Music-App",
   "keywords": [
     "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "YouTube",
+    "Music",
+    "Songs",
+    "Discord rich presence"
   ],
-  "author": "GitHub",
+  "author": "Denis Mignanelli",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^5.0.8"
+    "electron": "^5.0.8",
+    "electron-packager": "^14.0.4"
   },
   "dependencies": {
     "discord-rich-presence": "0.0.8",

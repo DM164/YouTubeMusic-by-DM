@@ -50,7 +50,7 @@ settingsTrigger.addEventListener('click', function(){
 ipcRenderer.on('request-song-data', function(){
     setTimeout(() => {
 
-        let titleVar = document.getElementsByClassName('title style-scope ytmusic-player-bar')[0].innerHTML
+        let titleVar = document.getElementsByClassName('title style-scope ytmusic-player-bar')[0].innerText
         
         let artistVar = document.getElementsByClassName('byline style-scope ytmusic-player-bar')[0].innerHTML
         let data = {

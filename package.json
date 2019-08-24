@@ -11,13 +11,6 @@
     "package-linux": "electron-packager . electron-tutorial-app --overwrite --platform=linux --arch=x64 --icon=assets/icons/png/icon.png --prune=true --out=release-builds"
   },
   "repository": "https://github.com/DM164/Unoffical-YouTube-Music-App",
-  "keywords": [
-    "Electron",
-    "YouTube",
-    "Music",
-    "Songs",
-    "Discord rich presence"
-  ],
   "author": "Denis Mignanelli",
   "license": "CC0-1.0",
   "devDependencies": {

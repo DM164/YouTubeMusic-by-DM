@@ -29,6 +29,16 @@ settingsTrigger.addEventListener('click', function(){
         appSettingsWindow.style.display = 'none'
         document.querySelector('body').prepend(appSettingsWindow);
 
+        //settings elements
+        const AppSettignsTitle = document.createElement('h1');
+        AppSettignsTitle.setAttribute('class', 'AppSettingsTitle');
+        AppSettignsTitle.innerText = 'App Settings'
+        document.querySelector('.appSettingsWindow').appendChild(AppSettignsTitle);
+    
+        const line1 = document.createElement('div');
+        line1.setAttribute('class', 'line1');
+        document.querySelector('.appSettingsWindow').appendChild(line1);
+
         //Background dimming
         const backgroundDimm = document.createElement('div');
         backgroundDimm.setAttribute('class', 'dimm');
@@ -47,16 +57,50 @@ settingsTrigger.addEventListener('click', function(){
     }
 });
 
+// Get timestamp from HTML document
+// document.querySelector(".time-info.ytmusic-player-bar").innerText
+
 ipcRenderer.on('request-song-data', function(){
     setTimeout(() => {
+
+        let rawTimestamp = document.querySelector(".time-info.ytmusic-player-bar").innerText;
+        rawTimestamp = rawTimestamp.substr(7);
+        console.log(`Raw timestamp: ${rawTimestamp}`);
+
+        //TODO finish timestamp
+        let minutesAlt = 0
+        let secondsAlt = 0
+
+        let timestamp = minutesAlt + secondsAlt
 
         let titleVar = document.getElementsByClassName('title style-scope ytmusic-player-bar')[0].innerText
         
         let artistVar = document.getElementsByClassName('byline style-scope ytmusic-player-bar')[0].innerHTML
+
+        if (artistVar.length < 85){
+            artistVar = artistVar.substr(57)
+            artistVar = artistVar.substring(0, artistVar.length - 7);
+        } else {
+            artistVar = 'Audio only'
+        }
+
         let data = {
             artist: artistVar,
-            title: titleVar
+            title: titleVar,
+            endtimestamp: timestamp
         }
         ipcRenderer.send('requested-data', data);
     }, 1000);
 });
+
+//Media control
+
+ipcRenderer.on('next-track-request', function(){
+    document.getElementsByClassName('next-button style-scope ytmusic-player-bar')[0].click();
+})
+ipcRenderer.on('play-pause-request', function(){
+    document.querySelector('#play-pause-button').click();
+})
+ipcRenderer.on('previous-track-request', function(){
+    document.getElementsByClassName('previous-button style-scope ytmusic-player-bar')[0].click();
+})

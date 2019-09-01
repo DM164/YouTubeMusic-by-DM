@@ -1,0 +1,23 @@
+.notifications {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #000000eb;
+    height: 8%;
+    width: 20%;
+    border-radius: 10px;
+    animation: slide-in 0.5s forwards;
+}
+.testing-notification {
+    color: #cacaca;
+    font-family: 'Nunito';
+    display: inline-block;
+    position: relative;
+    margin: 9%;
+}
+
+@keyframes slide-in {
+    0%{ transform: translateX(1000px) }
+    60%{ transform: translateX(-10px) }
+    100%{ transform: translateX(0px) }
+}

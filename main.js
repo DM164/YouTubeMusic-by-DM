@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain} = require('electron')
+const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
 const path = require('path')
 
 
@@ -33,6 +33,23 @@ function createWindow () {
     'minHeight': 700,
     'minWidth': 1100
   })
+
+  //Shortcuts
+  globalShortcut.register('MediaNextTrack', function () {
+    mainWindow.webContents.send('next-track-request')
+  });
+  globalShortcut.register('mediaplaypause', function () {
+    mainWindow.webContents.send('play-pause-request')
+  });
+  globalShortcut.register('mediaprevioustrack', function () {
+    mainWindow.webContents.send('previous-track-request')
+  });
+  globalShortcut.register('mediastop', function () {
+    console.log('mediastop pressed');
+  });
+  globalShortcut.register('Alt + 1', function () {
+    createOverlay();
+  });
   
 mainWindow.webContents.on('did-finish-load', function() {
   // mainWindow.webContents.insertCSS('html,body{ background-color: #FF0000 !important;}')
@@ -68,15 +85,9 @@ mainWindow.webContents.on('media-started-playing', function(){
 
     console.log(`Data arrived: Title: ${arg.title}, Artist: ${arg.artist}` )
 
-    if ( arg.artist.length > 30 ){
-      songArtist = 'Audio only'
-    } else {
-      songArtist = arg.artist
-    }
-
     client.updatePresence({
       details: arg.title, //Song title
-      state: songArtist, //Artist
+      state: arg.artist, //Artist
       startTimestamp: Date.now(),
       endTimestamp: Date.now() + 240000,
       largeImageKey: largeImg,
@@ -88,6 +99,7 @@ mainWindow.webContents.on('media-started-playing', function(){
 
     //store artist and title in case the user pauses the song
     songTitle = arg.title
+    songArtist = arg.artist
   });
 
 })
@@ -103,7 +115,6 @@ mainWindow.webContents.on('media-paused', function(){
     instance: true,
   });
 })
-
 
 ipcMain.on('closeApp:close', function(){
   app.close();
@@ -124,7 +135,9 @@ ipcMain.on('closeApp:close', function(){
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () =>{
+  createWindow()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -139,9 +152,7 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow()
 })
 
-
-
-//discord rich presence (old)
+//discord rich presence (at start)
 if (discordRichPresence == true){ //checks if user turned rich presence on or off
 
   //DISCORD RICH PRESENCE at startup   
@@ -153,4 +164,33 @@ if (discordRichPresence == true){ //checks if user turned rich presence on or of
     smallImageText: 'In the menus',
     instance: true,
   });
+}
+
+//Overlay window
+function createOverlay () {
+  // Create the browser window.
+  overlay = new BrowserWindow({
+    width: 100,
+    height: 400,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true
+    },
+    show: false,
+    icon: 'Icons/YTMIcon.png',
+    transparent: true,
+    frame: false,
+  })
+
+  overlay.loadFile('overlay.html')
+  overlay.maximize();
+  overlay.show();
+
+  // Emitted when the window is closed.
+  overlay.on('closed', function () {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    overlay = null
+  })
 }

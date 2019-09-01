@@ -16,46 +16,51 @@ body{
 }
 
 /* Youtube Elements */
-.right-content.ytmusic-nav-bar {
-    margin-top: 22px !important;
-}
 .logo.ytmusic-nav-bar {
-    margin-top: 10px !important;
-    left: 92px;
+    margin-top: -11px !important;
+    left: 100px;
     height: 24px;
     width: 92.361px;
-}
-#contents.ytmusic-section-list-renderer > ytmusic-carousel-shelf-renderer.ytmusic-section-list-renderer:not(:last-child), #contents.ytmusic-section-list-renderer > ytmusic-immersive-carousel-shelf-renderer.ytmusic-section-list-renderer:not(:last-child) {
-    position: relative;
-    top: 34px;
 }
 a.ytmusic-content-update-chip {
     background: #252525;
     color: #d0d0d0;
     --yt-endpoint-hover-color: #cacaca;
-    margin-top: 18px;
 }
 paper-icon-button.ytmusic-settings-button {
     background-color: #232323;
     margin-top: 22px;
 }
 .center-content.ytmusic-nav-bar, #nav-bar-background.ytmusic-app-layout {
-    margin-top: 22px !important;
     background: #0e0e0e;
     margin-right: -6px;
     width: 101%;
-}
-@media (max-width: 1149px){
-ytmusic-detail-header-renderer {
-    position: relative;
-    top: 22px;
-}
 }
 #sections.ytd-multi-page-menu-renderer > *.ytd-multi-page-menu-renderer {
     padding: 4px 0;
 }
 ytd-active-account-header-renderer {
     height: 70px;
+}
+ytmusic-item-section-renderer.stuck #header.ytmusic-item-section-renderer {
+    background-color: #0a0a0a;
+}
+paper-icon-button.ytmusic-settings-button {
+    background-color: transparent;
+    margin-top: -28px;
+    height: 14px;
+    width: 78px;
+    margin-right: 64px;
+    padding-left: 64px;
+    border-radius: 0%;
+}
+img.style-scope.iron-icon {
+    border-radius: 50%;
+}
+ytmusic-app-layout[player-visible_] #player-bar-background.ytmusic-app-layout {
+    transform: translate3d(0, 0, 0);
+    visibility: visible;
+    margin-right: -6px;
 }
 
 /* App settings */
@@ -106,20 +111,31 @@ ytd-active-account-header-renderer {
     border-radius: 8px;
 }
 
+h1.AppSettingsTitle {
+    margin: 20px 0px 20px 20px;
+    display: inline-block;
+    color: #d2d2d2;
+}
+.line1 {
+    background: #525252;
+    height: 1px;
+}
+
 
 /* Top bar */
 .topBar {
-    background: #0e0e0e;
+    background: transparent;
     height: 22px;
     position: fixed;
     z-index: 100;
     width: 101%;
     right: -5px;
-    -webkit-app-region: drag
+    -webkit-app-region: drag;
+    pointer-events: none;
 }
-#closeApp{
+#closeApp {
     -webkit-app-region: no-drag;
-    background: transparent;
+    background: #0E0E0E;
     border: solid 0px transparent;
     padding: 4px 6px;
     color: #B7B7B7;
@@ -130,6 +146,7 @@ ytd-active-account-header-renderer {
     font-size: 11px;
     outline-color: transparent;
     transition: 0.3s;
+    pointer-events: all;
 }
 #maximizeApp{
     -webkit-app-region: no-drag;
@@ -142,6 +159,7 @@ ytd-active-account-header-renderer {
     height: 22px;
     outline-color: transparent;
     transition: 0.3s;
+    pointer-events: all;
 }
 #minimizeApp {
     -webkit-app-region: no-drag;
@@ -154,7 +172,23 @@ ytd-active-account-header-renderer {
     outline-color: transparent;
     transition: 0.3s;
     border-radius: 0px 0px 0px 4px;
+    pointer-events: all;
 }
+#accountArea {
+    width: 90px;
+    height: 22px;
+    float: right;
+    -webkit-app-region: no-drag;
+    background: #e6e6e617;
+    border-radius: 0px 0px 5px 5px;
+    margin-right: 10px;
+}
+p.top {
+    color: white;
+    margin: 5%;
+    font-weight: 100;
+}
+
 #minimizeApp:hover, #maximizeApp:hover {
     background: #414141;
     outline-color: transparent;

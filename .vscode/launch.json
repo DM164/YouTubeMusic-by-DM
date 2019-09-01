@@ -6,7 +6,7 @@
     "configurations": [
     {
         "type": "electron",
-        "request": "launch",
+        "request": "start",
         "name": "Launch Electron",
         "appDir": "${workspaceFolder}\\main.js",
         "sourceMaps": true

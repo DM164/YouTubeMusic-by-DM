@@ -22,9 +22,17 @@ minimizeApp.setAttribute('id', 'minimizeApp');
 minimizeButtonImg.src = 'https://www.dropbox.com/s/l65mi8w1yaljx8u/minimizeApp.png?raw=1'
 minimizeApp.appendChild(minimizeButtonImg);
 
+const accountArea = document.createElement('div');
+const accountTitle = document.createElement('p');
+accountTitle.innerText = 'Settings'
+accountTitle.setAttribute('class', 'top');
+accountArea.append(accountTitle);
+accountArea.setAttribute('id', 'accountArea');
+
 topBar.appendChild(closeButton);
 topBar.appendChild(maximizeApp);
 topBar.appendChild(minimizeApp);
+topBar.appendChild(accountArea);
 
 document.querySelector('body').prepend(topBar);
 

@@ -27,7 +27,7 @@ function createWindow () {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true
     },
-    icon: 'Icons/YTMIcon.png',
+    icon: __dirname + '/assets/icons/png/icon.png',
     backgroundColor: '#1f1f1f',
     frame: false,
     'minHeight': 700,
@@ -129,6 +129,7 @@ ipcMain.on('closeApp:close', function(){
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
+    overlay = null
   })
 }
 
@@ -177,13 +178,14 @@ function createOverlay () {
       nodeIntegration: true
     },
     show: false,
-    icon: 'Icons/YTMIcon.png',
     transparent: true,
     frame: false,
+    skipTaskbar: true
   })
 
   overlay.loadFile('overlay.html')
   overlay.maximize();
+  overlay.setIgnoreMouseEvents(true);
   overlay.show();
 
   // Emitted when the window is closed.

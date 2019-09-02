@@ -1,0 +1,10 @@
+{
+    "dest": "release-builds/",
+    "icon": "resources/app/assets/icons/png/icon.png",
+    "categories": [
+      "Music"
+    ],
+    "lintianOverrides": [
+      "changelog-file-missing-in-native-package"
+    ]
+  }

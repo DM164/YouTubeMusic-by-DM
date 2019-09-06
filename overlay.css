@@ -2,7 +2,7 @@
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: #000000eb;
+    background: #111111eb;
     height: 8%;
     width: 20%;
     border-radius: 10px;
@@ -20,4 +20,33 @@
     0%{ transform: translateX(1000px) }
     60%{ transform: translateX(-10px) }
     100%{ transform: translateX(0px) }
+}
+
+.notifications2 {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #111111eb;
+    height: 8%;
+    width: 20%;
+    border-radius: 10px;
+    animation: slide-in-and-out 8s forwards;
+}
+.testing-notification2 {
+    color: #cacaca;
+    font-family: 'Nunito';
+    display: inline-block;
+    position: relative;
+    font-weight: 300;
+    margin: 5% 9%;
+}
+
+@keyframes slide-in-and-out {
+    0%{ transform: translateX(1000px) }
+    4%{ transform: translateX(-10px) }
+    8%{ transform: translateX(0px) }
+    50%{ transform: translateY(0px) }
+    54%{ transform: translateY(-10px) }
+    60%{ transform: translateY(1000px) }
+    100%{ transform: translateY(1000px) }
 }

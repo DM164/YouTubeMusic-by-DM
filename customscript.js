@@ -1,6 +1,25 @@
 const { remote } = require('electron');
 const { ipcRenderer } = require('electron')
 
+let firstStart = localStorage.getItem('firstStart') || 'true'
+
+//Discord Rich Presence LocalStorage
+if (firstStart == 'true'){
+    localStorage.setItem('DRP', 'true');
+    localStorage.setItem('firstStart', 'false');
+} else {
+    console.log('already started this app once')
+}
+setTimeout(() => {
+    sendDRPstatus()
+}, 3000);
+function sendDRPstatus(){
+    let something = {
+        lel: localStorage.getItem('DRP')
+    }
+    ipcRenderer.send('send-DRPstatus', something)
+}
+
 //app settings
 const settingsTrigger = document.querySelector('.style-scope ytmusic-settings-button')
 let opened = false
@@ -38,6 +57,31 @@ settingsTrigger.addEventListener('click', function(){
         const line1 = document.createElement('div');
         line1.setAttribute('class', 'line1');
         document.querySelector('.appSettingsWindow').appendChild(line1);
+
+        //DRP settings
+        const DRPcontainer = document.createElement('div');
+        DRPcontainer.setAttribute('class', 'DRPContainer');
+
+        const DRPTitle = document.createElement('h2');
+        DRPTitle.setAttribute('class', 'DPRTitle');
+        DRPTitle.innerText= 'Discord Rich Presence'
+
+        const DPRDescription = document.createElement('p');
+        DPRDescription.setAttribute('class', 'DRPDesc')
+        DPRDescription.innerText= 'Decide whether or not to show what you are listening to on Discord. (Requires a restart)'
+
+        //DRP Switch (ON / OFF)
+        const DRPSwitch = document.createElement('div');
+        DRPSwitch.setAttribute('class', 'DRPSwitch');
+
+        const DRPindicator = document.createElement('div');
+        DRPindicator.setAttribute('class', 'DRPindicator');
+        
+        DRPcontainer.append(DRPTitle);
+        DRPcontainer.append(DPRDescription);
+        DRPcontainer.append(DRPSwitch);
+        DRPSwitch.append(DRPindicator);
+        document.querySelector('.appSettingsWindow').append(DRPcontainer);
 
         //Background dimming
         const backgroundDimm = document.createElement('div');

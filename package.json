@@ -1,7 +1,7 @@
 {
   "name": "unofficial-youtube-music-app",
   "productName": "YouTube Music App",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Desktop app built with electron for the YT Music service.",
   "main": "main.js",
   "scripts": {

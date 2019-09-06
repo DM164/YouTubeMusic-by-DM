@@ -2,7 +2,6 @@
 const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
 const path = require('path')
 
-
 //Discord rich presence client
 const client = require('discord-rich-presence')('611219815138590731');
 
@@ -11,12 +10,43 @@ const largeImg = 'rpc_icon'
 const largeImageText = 'YouTube Music App by DM (iGoof#0982 on Discord)'
 
 //Discord rich presence active setting switch
-let discordRichPresence = true; //TODO: add a setting to deactivate this
+let discordRichPresence = null;
 
+ipcMain.on('send-DRPstatus', function(event, arg){
+  discordRichPresence = arg.lel
+  if (discordRichPresence == "true"){
+    idleDRP()
+  }
+})
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+
+function createSplash() {
+  let splash = new BrowserWindow({
+    width: 1100,
+    height: 700,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true
+    },
+    icon: __dirname + '/assets/icons/png/icon.png',
+    backgroundColor: '#1f1f1f',
+    frame: false,
+    'minHeight': 625,
+    'minWidth': 950,
+  })
+  splash.loadFile('index.html')
+  createWindow()
+  mainWindow.once('ready-to-show', () => {
+    setTimeout(() => {
+      mainWindow.show()
+      splash.close();
+      splash = null;
+    }, 2000);
+  })
+}
 
 function createWindow () {
   // Create the browser window.
@@ -30,8 +60,9 @@ function createWindow () {
     icon: __dirname + '/assets/icons/png/icon.png',
     backgroundColor: '#1f1f1f',
     frame: false,
-    'minHeight': 700,
-    'minWidth': 1100
+    'minHeight': 625,
+    'minWidth': 950,
+    show: false
   })
 
   //Shortcuts
@@ -45,16 +76,19 @@ function createWindow () {
     mainWindow.webContents.send('previous-track-request')
   });
   globalShortcut.register('mediastop', function () {
+    createNotification()
     console.log('mediastop pressed');
-  });
-  globalShortcut.register('Alt + 1', function () {
-    createOverlay();
   });
   
 mainWindow.webContents.on('did-finish-load', function() {
   // mainWindow.webContents.insertCSS('html,body{ background-color: #FF0000 !important;}')
   // mainWindow.webContents.insertHTML('data:text/html,<p>Hello, World!</p>');
   mainWindow.webContents.executeJavaScript(`
+
+  const topBarJS = document.createElement('script');
+  topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/6jf7mb1921ae8nc/topBar.js?dl=0')
+  topBarJS.setAttribute('defer', '')
+  document.querySelector('body').appendChild(topBarJS);
 
   const stylesheet = document.createElement('link');
   stylesheet.setAttribute("rel", "stylesheet");
@@ -64,64 +98,76 @@ mainWindow.webContents.on('did-finish-load', function() {
   javascript.setAttribute('src', 'https://dl.dropbox.com/s/4bc4z4siyheclsr/customscript.js?dl=0')
   javascript.setAttribute('defer', '')
   document.querySelector('body').appendChild(javascript);
-
-  const topBarJS = document.createElement('script');
-  topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/6jf7mb1921ae8nc/topBar.js?dl=0')
-  topBarJS.setAttribute('defer', '')
-  document.querySelector('body').appendChild(topBarJS);
   
   document.querySelector('head').appendChild(stylesheet);
   `)
+
+  //Overlay
+  let overlayOpen = false
+  globalShortcut.register('Alt + 1', function () {
+    if(overlayOpen == false){
+      createOverlay();
+      overlayOpen = true;
+    } else {
+      overlay.close();
+      overlay = null;
+      overlayOpen = false;
+    }
+  });
 });
 
 let songTitle = 'Title'
 let songArtist = 'Artist'
 
 //DISCORD RICH PRESENCE (new)
-mainWindow.webContents.on('media-started-playing', function(){
-
-  mainWindow.webContents.send('request-song-data', 'data reached customscript.js')
-  ipcMain.on('requested-data', function(event, arg){
-
-    console.log(`Data arrived: Title: ${arg.title}, Artist: ${arg.artist}` )
-
-    client.updatePresence({
-      details: arg.title, //Song title
-      state: arg.artist, //Artist
-      startTimestamp: Date.now(),
-      endTimestamp: Date.now() + 240000,
-      largeImageKey: largeImg,
-      largeImageText: largeImageText,
-      smallImageKey: 'play',
-      smallImageText: 'Playing a song',
-      instance: true,
+  mainWindow.webContents.on('media-started-playing', function(){
+  
+    if (discordRichPresence == "true"){
+    mainWindow.webContents.send('request-song-data', 'data reached customscript.js')
+    ipcMain.on('requested-data', function(event, arg){
+  
+      console.log(`Data arrived: Title: ${arg.title}, Artist: ${arg.artist}` )
+  
+      client.updatePresence({
+        details: arg.title, //Song title
+        state: arg.artist, //Artist
+        startTimestamp: Date.now(),
+        endTimestamp: Date.now() + 240000,
+        largeImageKey: largeImg,
+        largeImageText: largeImageText,
+        smallImageKey: 'play',
+        smallImageText: 'Playing a song',
+        instance: true,
+      });
+  
+      //store artist and title in case the user pauses the song
+      songTitle = arg.title
+      songArtist = arg.artist
     });
+    }
+  })
+  mainWindow.webContents.on('media-paused', function(){
+    if(discordRichPresence == "true"){
+      console.log('media was paused right now')
+      client.updatePresence({
+        details: songTitle, //Song title
+        state: songArtist, //Artist
+        largeImageKey: largeImg,
+        largeImageText: largeImageText,
+        smallImageKey: 'pause',
+        smallImageText: 'Paused',
+        instance: true,
+      });
+    }
+  })
 
-    //store artist and title in case the user pauses the song
-    songTitle = arg.title
-    songArtist = arg.artist
-  });
-
-})
-mainWindow.webContents.on('media-paused', function(){
-  console.log('media was paused right now')
-  client.updatePresence({
-    details: songTitle, //Song title
-    state: songArtist, //Artist
-    largeImageKey: largeImg,
-    largeImageText: largeImageText,
-    smallImageKey: 'pause',
-    smallImageText: 'Paused',
-    instance: true,
-  });
-})
 
 ipcMain.on('closeApp:close', function(){
   app.close();
 });
 
   // App Splashscreen
-  mainWindow.loadFile('index.html')
+  mainWindow.loadURL('https://music.youtube.com/');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -137,7 +183,7 @@ ipcMain.on('closeApp:close', function(){
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () =>{
-  createWindow()
+  createSplash()
 })
 
 // Quit when all windows are closed.
@@ -153,18 +199,16 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow()
 })
 
-//discord rich presence (at start)
-if (discordRichPresence == true){ //checks if user turned rich presence on or off
-
-  //DISCORD RICH PRESENCE at startup   
-  client.updatePresence({
-    details: 'Not listening to anything', //Song title or app status
-    largeImageKey: largeImg,
-    largeImageText: largeImageText,
-    smallImageKey: 'menus',
-    smallImageText: 'In the menus',
-    instance: true,
-  });
+//DISCORD RICH PRESENCE at startup
+function idleDRP(){
+    client.updatePresence({
+      details: 'Not listening to anything',
+      largeImageKey: largeImg,
+      largeImageText: largeImageText,
+      smallImageKey: 'menus',
+      smallImageText: 'In the menus',
+      instance: true,
+    });
 }
 
 //Overlay window
@@ -185,8 +229,8 @@ function createOverlay () {
 
   overlay.loadFile('overlay.html')
   overlay.maximize();
-  overlay.setIgnoreMouseEvents(true);
   overlay.show();
+  // overlay.setIgnoreMouseEvents(true);
 
   // Emitted when the window is closed.
   overlay.on('closed', function () {
@@ -194,5 +238,39 @@ function createOverlay () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     overlay = null
+  })
+}
+
+//Notifications
+function createNotification() {
+  // Create the browser window.
+  notification = new BrowserWindow({
+    width: 100,
+    height: 400,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true
+    },
+    show: false,
+    transparent: true,
+    frame: false,
+    skipTaskbar: true
+  })
+
+  notification.loadFile('notification.html')
+  notification.maximize();
+  notification.show();
+  notification.setIgnoreMouseEvents(true);
+
+  setTimeout(() => {
+    notification.close();
+  }, 5000);
+
+  // Emitted when the window is closed.
+  notification.on('closed', function () {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    notification = null
   })
 }

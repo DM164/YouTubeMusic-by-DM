@@ -2,6 +2,13 @@
 const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
 const path = require('path')
 
+//Update the app automatically
+require('update-electron-app')({
+  repo: 'DM164/Unoffical-YouTube-Music-App',
+  updateInterval: '1 hour',
+  notifyUser: true
+})
+
 //Discord rich presence client
 const client = require('discord-rich-presence')('611219815138590731');
 
@@ -19,6 +26,9 @@ ipcMain.on('send-DRPstatus', function(event, arg){
   }
 })
 
+//Electron Client Version
+const ClientVersion = '0.5.0'
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -34,11 +44,15 @@ function createSplash() {
     icon: __dirname + '/assets/icons/png/icon.png',
     backgroundColor: '#1f1f1f',
     frame: false,
+    show: false,
     'minHeight': 625,
     'minWidth': 950,
   })
   splash.loadFile('index.html')
   createWindow()
+  setTimeout(() => {
+    splash.show()
+  }, 1000);
   mainWindow.once('ready-to-show', () => {
     setTimeout(() => {
       mainWindow.show()
@@ -88,7 +102,7 @@ mainWindow.webContents.on('did-finish-load', function() {
   const topBarJS = document.createElement('script');
   topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/6jf7mb1921ae8nc/topBar.js?dl=0')
   topBarJS.setAttribute('defer', '')
-  document.querySelector('body').appendChild(topBarJS);
+  document.querySelector('body').prepend(topBarJS);
 
   const stylesheet = document.createElement('link');
   stylesheet.setAttribute("rel", "stylesheet");
@@ -97,7 +111,12 @@ mainWindow.webContents.on('did-finish-load', function() {
   const javascript = document.createElement('script');
   javascript.setAttribute('src', 'https://dl.dropbox.com/s/4bc4z4siyheclsr/customscript.js?dl=0')
   javascript.setAttribute('defer', '')
-  document.querySelector('body').appendChild(javascript);
+  document.querySelector('body').prepend(javascript);
+  
+  const versionCheck = document.createElement('script');
+  versionCheck.setAttribute('src', 'https://dl.dropbox.com/s/7r2f25yufd8pbpv/ClientCheck.js?dl=0')
+  versionCheck.setAttribute('defer', '')
+  document.querySelector('body').prepend(versionCheck);
   
   document.querySelector('head').appendChild(stylesheet);
   `)
@@ -274,3 +293,7 @@ function createNotification() {
     notification = null
   })
 }
+
+ipcMain.on('versionCheck', function(){
+  mainWindow.webContents.send('versionCheckAnswer', ClientVersion)
+})

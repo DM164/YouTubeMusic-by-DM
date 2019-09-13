@@ -1,0 +1,164 @@
+* {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Overlay */
+body {
+    background: #00000052;
+    animation-delay: 0.5s;
+    animation: blend-in 0.5s ease;
+}
+.overlay-controls {
+    position: fixed;
+    background: #292929f6;
+    height: 86px;
+    width: 20%;
+    border-radius: 6px;
+    animation-delay: 1s;
+    animation: slide-in 0.5s forwards;
+    right: 29.5%;
+    top: 24px;
+    box-shadow: 3px 3px 8px #00000048;
+}
+.overlay-artist{
+    position: fixed;
+    background: #292929f6;
+    height: 86px;
+    width: 20%;
+    border-radius: 6px;
+    animation-delay: 1s;
+    animation: slide-in 0.5s forwards;
+    left: 29.5%;
+    top: 24px;
+    box-shadow: 3px 3px 8px #0000003d;
+}
+.overlay-text {
+    color: #cacaca;
+    font-family: 'Roboto';
+    display: inline-block;
+    position: relative;
+}
+.title {
+    color: #cacaca;
+    position: absolute;
+    top: 16px;
+    font-size: 36px;
+    margin-left: 10px;
+}
+.artist {
+    color: #949494;
+    position: absolute;
+    top: 55px;
+    margin-left: 12px;
+}
+.imgFrame {
+    height: 64px;
+    width: 64px;
+    overflow: hidden;
+    margin: 11px;
+    display: inline-block;
+    border-radius: 5px;
+}
+.albumImg{
+    height: 100%;
+    width: 100%;
+}
+.next {
+    margin: 26px 0px 26px 0px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition-property: opacity;
+    transition-duration: 0.4s;
+}
+.previous {
+    margin: 26px 0px 26px 26px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition-property: opacity;
+    transition-duration: 0.4s;
+}
+.pause {
+    margin: 26px 0px 26px 0px;
+    height: 30px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition-property: opacity;
+    transition-duration: 0.4s;
+}
+.play {
+    margin: 26px 0px 26px 0px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition-property: opacity;
+    transition-duration: 0.4s;
+}
+#timestamp {
+    color: #cacaca;
+    font-size: 45px;
+    font-family: 'Roboto';
+    margin: 20.5px 28px 20.5px 0px;
+    float: right;
+}
+.line2 {
+    height: 80%;
+    width: 1px;
+    background: #ffffff0d;
+    margin: 2.3% 0% 2.3% 22px;
+    display: inline-block;
+}
+
+/* Overlay hover */
+.next:hover {
+    opacity: 1;
+}   
+.previous:hover {
+    opacity: 1;
+}   
+.pause:hover {
+    opacity: 1;
+}   
+.play:hover {
+    opacity: 1;
+}
+
+
+@keyframes slide-in {
+    0%{ transform: translateY(-1000px) }
+    60%{ transform: translateY(10px) }
+    100%{ transform: translateY(0px) }
+}
+@keyframes blend-in {
+    0%{ background: transparent }
+    100%{ background: #00000052 }
+}
+
+/* Notifications */
+.notifications2 {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #111111eb;
+    height: 8%;
+    width: 20%;
+    border-radius: 10px;
+    animation: slide-in-and-out 8s forwards;
+}
+.testing-notification2 {
+    color: #cacaca;
+    font-family: 'Nunito';
+    display: inline-block;
+    position: relative;
+    font-weight: 300;
+    margin: 5% 9%;
+}
+
+@keyframes slide-in-and-out {
+    0%{ transform: translateX(1000px) }
+    4%{ transform: translateX(-10px) }
+    8%{ transform: translateX(0px) }
+    50%{ transform: translateY(0px) }
+    54%{ transform: translateY(-10px) }
+    60%{ transform: translateY(1000px) }
+    100%{ transform: translateY(1000px) }
+}

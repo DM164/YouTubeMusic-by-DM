@@ -1,10 +1,13 @@
+* {
+    user-select: none;
+    -webkit-user-drag: none;
+}
 body{
     background: black;
 }
 
 /* Youtube Elements */
 .logo.ytmusic-nav-bar {
-    margin-top: -11px !important;
     left: 100px;
     height: 24px;
     width: 92.361px;
@@ -220,6 +223,36 @@ p.DRPDesc {
     background: #4d82a9;
 }
 
+/* Client check 
+STRUCTURE: a <div> (notification) and a <p> inside (p.notification-text) and an <img> as button to update the client */
+#notification {
+    background: #1f1f1ffc;
+    position: absolute;
+    height: 50px;
+    width: 300px;
+    z-index: 100;
+    bottom: 12px;
+    left: 12px;
+    border-radius: 4px;
+    box-shadow: 3px 3px 6px 0px #000000b8;
+    cursor: pointer;
+    display: none;
+    animation: slide-up 0.8s forwards;
+}
+p.notification-text {
+    color: #d0d0d0;
+    font-family: 'Roboto';
+    font-size: 17px;
+    margin: 15px;
+    display: inline-block;
+}
+img.notification-img {
+    opacity: 0.7;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+}
+
 /* Top bar */
 .topBar {
     background: transparent;
@@ -313,4 +346,10 @@ p.top {
 }
 ::-webkit-scrollbar-thumb:hover {
     background: #2f2f2f;
+}
+
+@keyframes slide-up {
+    0%{ transform: translateY(700px) }
+    85%{ transform: translateY(-10px) }
+    100%{ transform: translateY(0px) }
 }

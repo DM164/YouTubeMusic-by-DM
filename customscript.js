@@ -1,4 +1,3 @@
-const { remote } = require('electron');
 const { ipcRenderer } = require('electron')
 
 let firstStart = localStorage.getItem('firstStart') || 'true'
@@ -138,7 +137,6 @@ ipcRenderer.on('request-song-data', function(){
 });
 
 //Media control
-
 ipcRenderer.on('next-track-request', function(){
     document.getElementsByClassName('next-button style-scope ytmusic-player-bar')[0].click();
 })
@@ -148,3 +146,40 @@ ipcRenderer.on('play-pause-request', function(){
 ipcRenderer.on('previous-track-request', function(){
     document.getElementsByClassName('previous-button style-scope ytmusic-player-bar')[0].click();
 })
+
+//Client Version popup
+const versionNotification = document.createElement('div');
+versionNotification.setAttribute('id', 'notification');
+const notificationText = document.createElement('p');
+notificationText.setAttribute('class', 'notification-text');
+notificationText.innerText = 'Your Client is outdated.';
+const notificationImg = document.createElement('img');
+notificationImg.setAttribute('class', 'notification-img')
+notificationImg.setAttribute('src', 'https://www.dropbox.com/s/umitkbwt3p885jj/update.png?raw=1');
+
+versionNotification.append(notificationText);
+versionNotification.append(notificationImg);
+document.querySelector('body').prepend(versionNotification);
+
+document.getElementById('notification').addEventListener('click', function(){
+    openBrowser()
+})
+function openBrowser(){
+    ipcRenderer.send('openReleases')
+}
+
+//Checks if the client is up to date or not
+checkClientVersion()
+function checkClientVersion(){
+    ipcRenderer.send('versionCheck')
+    ipcRenderer.on('versionCheckAnswer', function(event, arg){
+        if (arg >= '0.5.0'){
+            console.log('Client up to date')//TODO: create a popup window and save how many times it poped up
+        } else {
+            setTimeout(() => {
+                document.getElementById('notification').style.display='block'
+            }, 4000);
+            console.log('Your client is outdated')
+        }
+    })
+}

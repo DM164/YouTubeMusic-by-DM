@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain, globalShortcut} = require('electron')
+const { app, BrowserWindow, ipcMain, globalShortcut, shell } = require('electron')
 const path = require('path')
 
 //Update the app automatically
@@ -27,7 +27,7 @@ ipcMain.on('send-DRPstatus', function(event, arg){
 })
 
 //Electron Client Version
-const ClientVersion = '0.5.0'
+const ClientVersion = '0.6.0'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -93,47 +93,49 @@ function createWindow () {
     createNotification()
     console.log('mediastop pressed');
   });
-  
-mainWindow.webContents.on('did-finish-load', function() {
-  // mainWindow.webContents.insertCSS('html,body{ background-color: #FF0000 !important;}')
-  // mainWindow.webContents.insertHTML('data:text/html,<p>Hello, World!</p>');
-  mainWindow.webContents.executeJavaScript(`
 
-  const topBarJS = document.createElement('script');
-  topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/6jf7mb1921ae8nc/topBar.js?dl=0')
-  topBarJS.setAttribute('defer', '')
-  document.querySelector('body').prepend(topBarJS);
+  //Overlay commands
+  ipcMain.on('overlay-play-pause', function(){
+    mainWindow.webContents.send('play-pause-request')
+  })
+  
+mainWindow.webContents.executeJavaScript(`
 
-  const stylesheet = document.createElement('link');
-  stylesheet.setAttribute("rel", "stylesheet");
-  stylesheet.setAttribute("href", "https://dl.dropbox.com/s/k2ta8h2yuj0uh20/style.css?dl=0");
-  
-  const javascript = document.createElement('script');
-  javascript.setAttribute('src', 'https://dl.dropbox.com/s/4bc4z4siyheclsr/customscript.js?dl=0')
-  javascript.setAttribute('defer', '')
-  document.querySelector('body').prepend(javascript);
-  
-  const versionCheck = document.createElement('script');
-  versionCheck.setAttribute('src', 'https://dl.dropbox.com/s/7r2f25yufd8pbpv/ClientCheck.js?dl=0')
-  versionCheck.setAttribute('defer', '')
-  document.querySelector('body').prepend(versionCheck);
-  
-  document.querySelector('head').appendChild(stylesheet);
-  `)
+const topBarJS = document.createElement('script');
+topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/6jf7mb1921ae8nc/topBar.js?dl=0')
+topBarJS.setAttribute('defer', '')
+document.querySelector('body').prepend(topBarJS);
 
-  //Overlay
-  let overlayOpen = false
-  globalShortcut.register('Alt + 1', function () {
-    if(overlayOpen == false){
-      createOverlay();
-      overlayOpen = true;
-    } else {
-      overlay.close();
-      overlay = null;
-      overlayOpen = false;
-    }
-  });
+const stylesheet = document.createElement('link');
+stylesheet.setAttribute("rel", "stylesheet");
+stylesheet.setAttribute("href", "https://dl.dropbox.com/s/k2ta8h2yuj0uh20/style.css?dl=0");
+
+const javascript = document.createElement('script');
+javascript.setAttribute('src', 'https://dl.dropbox.com/s/4bc4z4siyheclsr/customscript.js?dl=0')
+javascript.setAttribute('defer', '')
+document.querySelector('body').prepend(javascript);
+
+document.querySelector('head').appendChild(stylesheet);
+`)
+
+//Overlay
+let overlayOpen = false
+globalShortcut.register('Alt + 1', function () {
+  if(overlayOpen == false){
+    createOverlay();
+    overlayOpen = true;
+  } else {
+    overlay.close();
+    overlay = null;
+    overlayOpen = false;
+  }
 });
+
+//Opens the Github page to download the latest version of the client
+ipcMain.on('openReleases', function(){
+    shell.openItem('https://github.com/DM164/Unoffical-YouTube-Music-App/releases');
+});
+
 
 let songTitle = 'Title'
 let songArtist = 'Artist'
@@ -243,13 +245,13 @@ function createOverlay () {
     show: false,
     transparent: true,
     frame: false,
-    skipTaskbar: true
+    skipTaskbar: true,
+    fullscreen: true,
+    resizable: false
   })
 
   overlay.loadFile('overlay.html')
-  overlay.maximize();
   overlay.show();
-  // overlay.setIgnoreMouseEvents(true);
 
   // Emitted when the window is closed.
   overlay.on('closed', function () {
@@ -278,8 +280,8 @@ function createNotification() {
 
   notification.loadFile('notification.html')
   notification.maximize();
-  notification.show();
   notification.setIgnoreMouseEvents(true);
+  notification.show();
 
   setTimeout(() => {
     notification.close();

@@ -3,15 +3,31 @@
 <head>
     <title>Overlay</title>
     <link rel="stylesheet" href="reset.css">
-    <link rel="stylesheet" href="overlay.css">
+    <link rel="stylesheet" href="notification-overlay.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="notifications">
+    <div class="overlay-controls">
         <img class="previous" src="./assets/overlay/previous.png" alt="previous">
-        <img class="pause" src="./assets/overlay/pause.png" alt="pause">
-        <img class="play" src="./assets/overlay/play.png" alt="play" style="display: none"> <!-- Script to change the icon when music isn't playing -->
+        <img class="pause" src="./assets/overlay/pause.png" alt="pause" style="display: none"> <!--New PNG file-->
+        <img class="play" src="./assets/overlay/play.png" alt="play"> <!-- Script to change the icon when music isn't playing --> <!--new PNG file-->
         <img class="next" src="./assets/overlay/next.png" alt="next">
-        <!-- <h1 class="testing-notification">Overlay</h1> -->
+        <div class="line2"></div>
+        <h1 id="timestamp">0:00</h1>
+        <!-- <h1 class="overlay-text">Overlay</h1> -->
     </div>
+    <div class="overlay-artist">
+        <div class="imgFrame">
+            <img class="albumImg" src="Icons/anime-landscape-scenic-stream-sky-clouds.jpg" alt="album art">
+        </div>
+        <p class="overlay-text title">Title</p>
+        <p class="overlay-text artist">Artist</p>
+    </div>
+    <script>
+    const {BrowserWindow, electron, ipcRenderer} = require('electron')
+    document.querySelector('.play').addEventListener('click', function(){
+        ipcRenderer.send('overlay-play-pause')
+    });//TODO: fix this
+    </script>
 </body>
 </html>

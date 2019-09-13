@@ -5,6 +5,7 @@ body{
     position: absolute;
     height: 100%;
     width: 100%;
+    -webkit-user-drag: none;
 }
 .logo-div{
     width: 100%;
@@ -20,4 +21,5 @@ body{
     margin-top: -75px;
     margin-left: -75px;
     z-index: 1;
+    -webkit-user-drag: none;
 }

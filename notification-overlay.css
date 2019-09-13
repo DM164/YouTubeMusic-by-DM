@@ -12,6 +12,7 @@ body {
 .overlay-controls {
     position: fixed;
     background: #292929f6;
+    min-width: 384px;
     height: 86px;
     width: 20%;
     border-radius: 6px;
@@ -24,6 +25,7 @@ body {
 .overlay-artist{
     position: fixed;
     background: #292929f6;
+    min-width: 384px;
     height: 86px;
     width: 20%;
     border-radius: 6px;

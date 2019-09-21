@@ -107,18 +107,11 @@ ipcRenderer.on('request-song-data', function(){
     setTimeout(() => {
 
         let rawTimestamp = document.querySelector(".time-info.ytmusic-player-bar").innerText;
-        rawTimestamp = rawTimestamp.substr(7);
-        console.log(`Raw timestamp: ${rawTimestamp}`);
-
-        //TODO finish timestamp
-        let minutesAlt = 0
-        let secondsAlt = 0
-
-        let timestamp = minutesAlt + secondsAlt
+        endTimestamp = rawTimestamp.substr(7);
 
         let titleVar = document.getElementsByClassName('title style-scope ytmusic-player-bar')[0].innerText
-        
         let artistVar = document.getElementsByClassName('byline style-scope ytmusic-player-bar')[0].innerHTML
+        let volumeVar = document.getElementById('expand-volume-slider').value
 
         if (artistVar.length < 85){
             artistVar = artistVar.substr(57)
@@ -130,7 +123,8 @@ ipcRenderer.on('request-song-data', function(){
         let data = {
             artist: artistVar,
             title: titleVar,
-            endtimestamp: timestamp
+            volume: volumeVar,
+            endTimestamp: endTimestamp,
         }
         ipcRenderer.send('requested-data', data);
     }, 1000);
@@ -145,6 +139,33 @@ ipcRenderer.on('play-pause-request', function(){
 })
 ipcRenderer.on('previous-track-request', function(){
     document.getElementsByClassName('previous-button style-scope ytmusic-player-bar')[0].click();
+})
+
+let current = document.getElementById('expand-volume-slider').value
+
+ipcRenderer.on('volume-up', function(){
+    current = current + 5
+    if (current > 100){
+        current = 100
+    }
+    document.getElementById('expand-volume-slider').value=current
+})
+ipcRenderer.on('volume-down', function(){
+    current = current - 5
+    if (current < 0){
+        current = 0
+    }
+    document.getElementById('expand-volume-slider').value=current
+})
+
+ipcRenderer.on('request-volume-data', function(){
+    current = document.getElementById('expand-volume-slider').value
+    ipcRenderer.send('requested-volume-data', current)
+})
+ipcRenderer.on('request-time-data', function(){
+    let rawTimestamp2 = document.querySelector(".time-info.ytmusic-player-bar").innerText;
+    let timestamp = rawTimestamp2.slice(0, -7);
+    ipcRenderer.send('requested-time-data', timestamp)
 })
 
 //Client Version popup

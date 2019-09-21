@@ -2,7 +2,7 @@
 const { app, BrowserWindow, ipcMain, globalShortcut, shell } = require('electron')
 const path = require('path')
 
-//Update the app automatically
+//Update the app automatically NOT WORKING ATM
 require('update-electron-app')({
   repo: 'DM164/Unoffical-YouTube-Music-App',
   updateInterval: '1 hour',
@@ -93,10 +93,30 @@ function createWindow () {
     createNotification()
     console.log('mediastop pressed');
   });
+  globalShortcut.register('Ctrl+Up', function () {
+    mainWindow.webContents.send('volume-up')
+  });
+  globalShortcut.register('Ctrl+Down', function () {
+    mainWindow.webContents.send('volume-down')
+  });
+  
 
   //Overlay commands
   ipcMain.on('overlay-play-pause', function(){
     mainWindow.webContents.send('play-pause-request')
+  })
+  ipcMain.on('overlay-next', function(){
+    mainWindow.webContents.send('next-track-request')
+  })
+  ipcMain.on('overlay-previous', function(){
+    mainWindow.webContents.send('previous-track-request')
+  })
+
+  ipcMain.on('overlay-volume-up', function(){
+    mainWindow.webContents.send('volume-up')
+  })
+  ipcMain.on('overlay-volume-down', function(){
+    mainWindow.webContents.send('volume-down')
   })
   
 mainWindow.webContents.executeJavaScript(`
@@ -139,6 +159,8 @@ ipcMain.on('openReleases', function(){
 
 let songTitle = 'Title'
 let songArtist = 'Artist'
+let playerVolume = '0'
+let endTimestamp = '0:00'
 
 //DISCORD RICH PRESENCE (new)
   mainWindow.webContents.on('media-started-playing', function(){
@@ -147,13 +169,13 @@ let songArtist = 'Artist'
     mainWindow.webContents.send('request-song-data', 'data reached customscript.js')
     ipcMain.on('requested-data', function(event, arg){
   
-      console.log(`Data arrived: Title: ${arg.title}, Artist: ${arg.artist}` )
+      console.log(`Data arrived: Title: ${arg.title}, Artist: ${arg.artist}, Volume: ${arg.volume}` )
   
       client.updatePresence({
         details: arg.title, //Song title
         state: arg.artist, //Artist
-        startTimestamp: Date.now(),
-        endTimestamp: Date.now() + 240000,
+        // startTimestamp: Date.now(),
+        // endTimestamp: Date.now() + 240000,
         largeImageKey: largeImg,
         largeImageText: largeImageText,
         smallImageKey: 'play',
@@ -161,10 +183,47 @@ let songArtist = 'Artist'
         instance: true,
       });
   
-      //store artist and title in case the user pauses the song
+      //store artist and title in case the user pauses the song or opens the overlay
       songTitle = arg.title
       songArtist = arg.artist
+      playerVolume = arg.volume
+      endTimestamp = arg.endTimestamp
     });
+    }
+
+    //Overlay data request when opened
+    ipcMain.on('request-overlay-data', function(){
+        let data = [
+          title = songTitle,
+          artist = songArtist,
+          volume = playerVolume,
+          endTimestamp = endTimestamp,
+        ]
+        overlay.webContents.send('requested-overlay-data', data)
+    })
+    //Volume request
+    ipcMain.on('request-volume-data', function(){
+      mainWindow.send('request-volume-data')
+    })
+    ipcMain.on('requested-volume-data', function(event, arg){
+      overlay.send('requested-volume-data', arg)
+    })
+    //Timestamp request
+    ipcMain.on('request-time-data', function(){
+      mainWindow.send('request-time-data')
+    })
+    ipcMain.on('requested-time-data', function(event, arg){
+      overlay.send('requested-time-data', arg)
+    })
+    //Overlay data request when changing song while already open
+    if ( overlayOpen == true ){
+      let data = [
+        title = songTitle,
+        artist = songArtist,
+        volume = playerVolume,
+        endTimestamp = endTimestamp
+      ]
+      overlay.webContents.send('requested-overlay-data', data)
     }
   })
   mainWindow.webContents.on('media-paused', function(){
@@ -250,7 +309,7 @@ function createOverlay () {
     resizable: false
   })
 
-  overlay.loadFile('overlay.html')
+  overlay.loadFile('overlay.html');
   overlay.show();
 
   // Emitted when the window is closed.
@@ -275,13 +334,14 @@ function createNotification() {
     show: false,
     transparent: true,
     frame: false,
-    skipTaskbar: true
+    skipTaskbar: true,
+    fullscreen: true,
+    resizable: false
   })
 
   notification.loadFile('notification.html')
-  notification.maximize();
-  notification.setIgnoreMouseEvents(true);
   notification.show();
+  notification.setIgnoreMouseEvents(true);
 
   setTimeout(() => {
     notification.close();

@@ -20,8 +20,7 @@ body {
     animation: slide-in 1s forwards;
     top: 24px;
     box-shadow: 3px 3px 8px #00000048;
-    left: 29.5%;
-    margin-left: 394px;
+    left: 50%;
 }
 .overlay-artist {
     position: fixed;
@@ -32,10 +31,11 @@ body {
     border-radius: 4px 4px 0px 0px;
     animation-delay: 1s;
     animation: slide-in 1s forwards;
-    left: 29.5%;
+    left: 50%;
     top: 24px;
     box-shadow: 3px 3px 8px #0000003d;
     overflow: hidden;
+    margin-left: -394px;
 }
 .overlay-text {
     color: #cacaca;

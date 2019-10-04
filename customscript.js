@@ -2,6 +2,9 @@ const { ipcRenderer } = require('electron')
 
 let firstStart = localStorage.getItem('firstStart') || 'true'
 
+//Version of the latest client
+const latestClient = '0.7.0'
+
 //Discord Rich Presence LocalStorage
 if (firstStart == 'true'){
     localStorage.setItem('DRP', 'true');
@@ -112,6 +115,7 @@ ipcRenderer.on('request-song-data', function(){
         let titleVar = document.getElementsByClassName('title style-scope ytmusic-player-bar')[0].innerText
         let artistVar = document.getElementsByClassName('byline style-scope ytmusic-player-bar')[0].innerHTML
         let volumeVar = document.getElementById('expand-volume-slider').value
+        let thumbVar = document.getElementsByClassName('image style-scope ytmusic-player-bar')[0].src
 
         if (artistVar.length < 85){
             artistVar = artistVar.substr(57)
@@ -125,6 +129,7 @@ ipcRenderer.on('request-song-data', function(){
             title: titleVar,
             volume: volumeVar,
             endTimestamp: endTimestamp,
+            thumb: thumbVar
         }
         ipcRenderer.send('requested-data', data);
     }, 1000);
@@ -194,7 +199,7 @@ checkClientVersion()
 function checkClientVersion(){
     ipcRenderer.send('versionCheck')
     ipcRenderer.on('versionCheckAnswer', function(event, arg){
-        if (arg >= '0.5.0'){
+        if (arg >= latestClient){
             console.log('Client up to date')//TODO: create a popup window and save how many times it poped up
         } else {
             setTimeout(() => {

@@ -2,6 +2,7 @@ const { ipcRenderer } = require('electron')
 
 let volumeCache = '100%'
 let time = '0:00'
+let thumb = 'assets/overlay/artwork.png'
 
 document.querySelector('.play').addEventListener('click', function(){
     ipcRenderer.send('overlay-play-pause')
@@ -22,7 +23,6 @@ document.querySelector('.up').addEventListener('click', function(){
 document.querySelector('.down').addEventListener('click', function(){
     ipcRenderer.send('overlay-volume-down')
 })
-
 
 setInterval(() => {
     ipcRenderer.send('request-volume-data')
@@ -53,12 +53,26 @@ ipcRenderer.on('requested-volume-data', function(event, arg){
 })
 
 ipcRenderer.on('requested-overlay-data', function(event, arg){
-
+    if (arg[4] === undefined || arg[4] === null || arg[4] === 'https://music.youtube.com/'){
+        //nothing
+    } else {
+        thumb = arg[4]
+    }
+})
+ipcRenderer.on('requested-overlay-data', function(event, arg){
     if (arg[0] == 'Title' && arg[1] == 'Artist'){
         //do nothing
     } else {
         document.querySelector('.title').innerText=arg[0]
         document.querySelector('.artist').innerText=arg[1]
         document.querySelector('#end-timestamp').innerText=arg[3]
+        document.querySelector('#albumImg').src=thumb
+        if (arg[5] === 'paused'){
+            document.querySelector('.pause').style.display='none'
+            document.querySelector('.play').style.display='inline-block'
+        } else {
+            document.querySelector('.play').style.display='none'
+            document.querySelector('.pause').style.display='inline-block'
+        }
     }
 })

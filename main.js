@@ -1,6 +1,11 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, globalShortcut, shell } = require('electron')
+const { app, BrowserWindow, ipcMain, globalShortcut, shell, dialog } = require('electron')
 const path = require('path')
+
+// Disable error dialogs
+dialog.showErrorBox = function(title, content) {
+    console.log(`${title}\n${content}`);
+};
 
 //Update the app automatically NOT WORKING ATM
 require('update-electron-app')({
@@ -27,7 +32,7 @@ ipcMain.on('send-DRPstatus', function(event, arg){
 })
 
 //Electron Client Version
-const ClientVersion = '0.6.0'
+const ClientVersion = '0.7.0'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -58,7 +63,7 @@ function createSplash() {
       mainWindow.show()
       splash.close();
       splash = null;
-    }, 2000);
+    }, 4000);
   })
 }
 
@@ -99,8 +104,15 @@ function createWindow () {
   globalShortcut.register('Ctrl+Down', function () {
     mainWindow.webContents.send('volume-down')
   });
-  
 
+  //Make a toggle for this
+  // globalShortcut.register('Ctrl+R', function () {
+  //   console.log('no reload')
+  // });
+  // globalShortcut.register('Ctrl+Shift+I', function () {
+  //   console.log('no dev tools')
+  // });
+  
   //Overlay commands
   ipcMain.on('overlay-play-pause', function(){
     mainWindow.webContents.send('play-pause-request')
@@ -126,14 +138,15 @@ topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/6jf7mb1921ae8nc/topBar.js
 topBarJS.setAttribute('defer', '')
 document.querySelector('body').prepend(topBarJS);
 
-const stylesheet = document.createElement('link');
-stylesheet.setAttribute("rel", "stylesheet");
-stylesheet.setAttribute("href", "https://dl.dropbox.com/s/k2ta8h2yuj0uh20/style.css?dl=0");
-
 const javascript = document.createElement('script');
 javascript.setAttribute('src', 'https://dl.dropbox.com/s/4bc4z4siyheclsr/customscript.js?dl=0')
 javascript.setAttribute('defer', '')
 document.querySelector('body').prepend(javascript);
+
+const stylesheet = document.createElement('link');
+stylesheet.setAttribute("rel", "stylesheet");
+stylesheet.setAttribute("href", "https://dl.dropbox.com/s/k2ta8h2yuj0uh20/style.css?dl=0");
+
 
 document.querySelector('head').appendChild(stylesheet);
 `)
@@ -161,15 +174,17 @@ let songTitle = 'Title'
 let songArtist = 'Artist'
 let playerVolume = '0'
 let endTimestamp = '0:00'
+let mediaStatus =  'paused'
 
 //DISCORD RICH PRESENCE (new)
   mainWindow.webContents.on('media-started-playing', function(){
+    mediaStatus = 'playing'
   
     if (discordRichPresence == "true"){
-    mainWindow.webContents.send('request-song-data', 'data reached customscript.js')
+    mainWindow.webContents.send('request-song-data')
     ipcMain.on('requested-data', function(event, arg){
   
-      console.log(`Data arrived: Title: ${arg.title}, Artist: ${arg.artist}, Volume: ${arg.volume}` )
+      console.log(`Data arrived: Title: ${arg.title}, Artist: ${arg.artist}, Volume: ${arg.volume}, End Timestamp: ${arg.endTimestamp}` )
   
       client.updatePresence({
         details: arg.title, //Song title
@@ -188,19 +203,41 @@ let endTimestamp = '0:00'
       songArtist = arg.artist
       playerVolume = arg.volume
       endTimestamp = arg.endTimestamp
+      thumb = arg.thumb
     });
     }
+    
+    mainWindow.webContents.on('media-paused', function(){
+      mediaStatus = 'paused'
 
-    //Overlay data request when opened
+      if(discordRichPresence == "true"){
+        console.log('media was paused right now')
+        client.updatePresence({
+          details: songTitle, //Song title
+          state: songArtist, //Artist
+          largeImageKey: largeImg,
+          largeImageText: largeImageText,
+          smallImageKey: 'pause',
+          smallImageText: 'Paused',
+          instance: true,
+        });
+      }
+    })
+
+    //Overlay data request
     ipcMain.on('request-overlay-data', function(){
+      mainWindow.webContents.send('request-song-data')
         let data = [
           title = songTitle,
           artist = songArtist,
           volume = playerVolume,
           endTimestamp = endTimestamp,
+          thumb = thumb,
+          mediaStatus = mediaStatus
         ]
         overlay.webContents.send('requested-overlay-data', data)
     })
+
     //Volume request
     ipcMain.on('request-volume-data', function(){
       mainWindow.send('request-volume-data')
@@ -215,30 +252,7 @@ let endTimestamp = '0:00'
     ipcMain.on('requested-time-data', function(event, arg){
       overlay.send('requested-time-data', arg)
     })
-    //Overlay data request when changing song while already open
-    if ( overlayOpen == true ){
-      let data = [
-        title = songTitle,
-        artist = songArtist,
-        volume = playerVolume,
-        endTimestamp = endTimestamp
-      ]
-      overlay.webContents.send('requested-overlay-data', data)
-    }
-  })
-  mainWindow.webContents.on('media-paused', function(){
-    if(discordRichPresence == "true"){
-      console.log('media was paused right now')
-      client.updatePresence({
-        details: songTitle, //Song title
-        state: songArtist, //Artist
-        largeImageKey: largeImg,
-        largeImageText: largeImageText,
-        smallImageKey: 'pause',
-        smallImageText: 'Paused',
-        instance: true,
-      });
-    }
+    
   })
 
 
@@ -335,11 +349,11 @@ function createNotification() {
     transparent: true,
     frame: false,
     skipTaskbar: true,
-    fullscreen: true,
     resizable: false
   })
 
   notification.loadFile('notification.html')
+  notification.maximize();
   notification.show();
   notification.setIgnoreMouseEvents(true);
 

@@ -227,7 +227,7 @@ p.DRPDesc {
 STRUCTURE: a <div> (notification) and a <p> inside (p.notification-text) and an <img> as button to update the client */
 #notification {
     background: #1f1f1ffc;
-    position: absolute;
+    position: fixed;
     height: 50px;
     width: 300px;
     z-index: 100;
@@ -270,7 +270,6 @@ img.notification-img {
     border: solid 0px transparent;
     padding: 4px 6px;
     color: #B7B7B7;
-    float: right;
     font-family: 'Nunito';
     height: 22px;
     font-weight: 900;
@@ -278,41 +277,46 @@ img.notification-img {
     outline-color: transparent;
     transition: 0.3s;
     pointer-events: all;
+    position: fixed;
+    right: -5px;
 }
-#maximizeApp{
+#maximizeApp {
     -webkit-app-region: no-drag;
     background: transparent;
     border: solid 0px transparent;
     padding: 4px 6px;
     color: #B7B7B7;
-    float: right;
     font-family: 'Nunito';
     height: 22px;
     outline-color: transparent;
     transition: 0.3s;
     pointer-events: all;
+    position: fixed;
+    right: 21px;
 }
 #minimizeApp {
     -webkit-app-region: no-drag;
     background: transparent;
     border: solid 0px transparent;
     padding: 4px 6px;
-    float: right;
     font-family: 'Nunito';
     height: 22px;
     outline-color: transparent;
     transition: 0.3s;
     border-radius: 0px 0px 0px 4px;
     pointer-events: all;
+    position: fixed;
+    right: 47px;
 }
 #accountArea {
     width: 90px;
     height: 22px;
-    float: right;
     -webkit-app-region: no-drag;
     background: #e6e6e617;
     border-radius: 0px 0px 5px 5px;
     margin-right: 10px;
+    position: fixed;
+    right: 73px;
 }
 p.top {
     color: white;

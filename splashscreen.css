@@ -1,5 +1,6 @@
 body{
     background: black;
+    animation: logonbackground-fade-in 3s forwards;
 }
 .SSbackground{
     position: absolute;
@@ -11,6 +12,7 @@ body{
     width: 100%;
     height: 100%;
     z-index: 1;
+    animation: logonbackground-fade-in 4s forwards;
 }
 .logo {
     position: absolute;
@@ -22,4 +24,45 @@ body{
     margin-left: -75px;
     z-index: 1;
     -webkit-user-drag: none;
+    border-radius: 50%;
+    animation: fade-in 4s infinite;
+}
+.text-container {
+    z-index: 1000;
+    position: absolute;
+    font-family: 'Roboto';
+    display: inline-block;
+    top: 80%;
+    left: 50%;
+    width: 150px;
+    height: 150px;
+    margin-top: -75px;
+    margin-left: -75px;
+    animation: text-fade-in 4s forwards;
+}
+.greetings {
+    color: white;
+    font-size: 34px;
+}
+.info {
+    color: #4e4e4e;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+@keyframes fade-in {
+    0%{ box-shadow: 0 0 20px 16px transparent;}
+    10%{ box-shadow: 0 0 20px 16px transparent;}
+    60%{ box-shadow: 0 0 20px 16px #610000; }
+    100%{ box-shadow: 0 0 20px 16px transparent; }
+}
+@keyframes text-fade-in {
+    0%{ opacity: 0; transform: translateY( 15px )}
+    35%{ transform: translateY( -4px )}
+    50%{ opacity: 0.7; transform: translateY( 0px )}
+    100%{ opacity: 1; }
+}
+@keyframes logonbackground-fade-in {
+    0%{ opacity: 0; }
+    100%{ opacity: 1; }
 }

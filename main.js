@@ -302,7 +302,7 @@ app.on('ready', () =>{
     { label: 'separator', type: 'separator'},
     { label: 'Open App', type:'normal', icon: openAppIcon, click: function trayfunction1() { mainWindow.show() }},
     { label: 'Kill DiscordRP', icon: KillDRP, click: function trayfunction2() { client.disconnect() }},
-    { label: 'Open Overlay', accelerator: 'Alt + 1', icon: openOverlayIcon, click: function trayfunction3() { overlayToggle() }},
+    { label: 'Open Overlay', accelerator: 'Alt + 1', icon: openOverlayIcon, click: function trayfunction3() { createNotification() }},
     { label: 'Quit App', accelerator: 'Ctrl + Q', icon: quitAppIcon, click: function(){ app.quit() }}
   ])
   tray.setToolTip('YouTube Music by DM')

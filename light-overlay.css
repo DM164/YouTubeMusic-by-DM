@@ -202,13 +202,13 @@ img.volume {
     margin: 6px 4px;
     opacity: 0.6;
     cursor: pointer;
-    font-family: 'Nunito';
+    font-family: 'Roboto';
     filter: invert(1);
 }
 p.volume.up {
     font-size: 18px;
     position: relative;
-    top: -12px;
+    top: -10px;
 }
 p.volume.down {
     font-size: 18px;

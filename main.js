@@ -154,6 +154,10 @@ document.querySelector('head').appendChild(stylesheet);
 //Overlay
 let overlayOpen = false
 globalShortcut.register('Alt + 1', function () {
+  overlayToggle();
+});
+
+function overlayToggle() {
   if(overlayOpen == false){
     createOverlay();
     overlayOpen = true;
@@ -162,7 +166,7 @@ globalShortcut.register('Alt + 1', function () {
     overlay = null;
     overlayOpen = false;
   }
-});
+}
 
 //Opens the Github page to download the latest version of the client
 ipcMain.on('openReleases', function(){
@@ -283,21 +287,23 @@ ipcMain.on('closeApp:close', function(){
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 let tray = null
-let theme = 'dark'
+const titleIcon = path.join(__dirname + '/assets/tray/tray-title-icon.png')
+const openAppIcon = path.join(__dirname + '/assets/tray/open.png')
+const KillDRP = path.join(__dirname + '/assets/tray/killDRP.png')
+const openOverlayIcon = path.join(__dirname + '/assets/tray/overlay.png')
+const quitAppIcon = path.join(__dirname + '/assets/tray/close.png')
 
 app.on('ready', () =>{
   createSplash()
 
-  tray = new Tray(`./assets/tray/tray-light.png`)
+  tray = new Tray(path.join(__dirname + '/assets/tray/tray-light.png'))
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'YouTube Music by DM', type: 'normal', icon: './assets/tray/tray-dark.png'},
+    { label: 'YouTube Music by DM', type: 'normal', icon: titleIcon, enabled: false},
     { label: 'separator', type: 'separator'},
-    { label: 'Theme', icon: './assets/tray/theme-icon.png', 
-    submenu: [
-      {label: 'Light', type: 'radio'},
-      {label: 'Dark', type: 'radio'}
-    ]},
-    { label: 'Open Ovelay', accelerator: 'Alt + 1'}
+    { label: 'Open App', type:'normal', icon: openAppIcon, click: function trayfunction1() { mainWindow.show() }},
+    { label: 'Kill DiscordRP', icon: KillDRP, click: function trayfunction2() { client.disconnect() }},
+    { label: 'Open Overlay', accelerator: 'Alt + 1', icon: openOverlayIcon, click: function trayfunction3() { overlayToggle() }},
+    { label: 'Quit App', accelerator: 'Ctrl + Q', icon: quitAppIcon, click: function(){ app.quit() }}
   ])
   tray.setToolTip('YouTube Music by DM')
   tray.setContextMenu(contextMenu)

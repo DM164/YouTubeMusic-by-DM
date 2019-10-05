@@ -166,7 +166,7 @@ globalShortcut.register('Alt + 1', function () {
 
 //Opens the Github page to download the latest version of the client
 ipcMain.on('openReleases', function(){
-    shell.openItem('https://github.com/DM164/Unoffical-YouTube-Music-App/releases');
+    shell.openExternal('https://github.com/DM164/Unoffical-YouTube-Music-App/releases');
 });
 
 
@@ -255,6 +255,12 @@ let mediaStatus =  'paused'
     
   })
 
+
+ipcMain.on('open-mainWindow', function(){
+  mainWindow.show();
+  overlay.close()
+  overlayOpen = false;
+});
 
 ipcMain.on('closeApp:close', function(){
   app.close();

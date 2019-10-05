@@ -24,6 +24,10 @@ document.querySelector('.down').addEventListener('click', function(){
     ipcRenderer.send('overlay-volume-down')
 })
 
+document.querySelector('#open-app').addEventListener('click', function(){
+    ipcRenderer.send('open-mainWindow');
+})
+
 setInterval(() => {
     ipcRenderer.send('request-volume-data')
     ipcRenderer.send('request-time-data')

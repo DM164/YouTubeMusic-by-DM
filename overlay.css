@@ -144,6 +144,23 @@ body {
     background-color: #232323;
     border-radius: 0px 0px 4px 4px;
 }
+#open-app {
+    color: #cacaca;
+    font-family: 'Roboto';
+    background: #313131;
+    display: inline-block;
+    padding: 3px 10px;
+    margin: 6px;
+    border-radius: 10px;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+#open-app:hover {
+    color: #dbdbdb;
+    background: #3d3d3d;
+    cursor: pointer;
+}
+
 .overlay-controls.below-right {
     height: 30px;
     top: 110px;

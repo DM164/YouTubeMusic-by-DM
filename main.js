@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, globalShortcut, shell, dialog } = require('electron')
+const { app, BrowserWindow, ipcMain, globalShortcut, shell, dialog, Tray, Menu, nativeTheme } = require('electron')
 const path = require('path')
 
 // Disable error dialogs
@@ -105,14 +105,14 @@ function createWindow () {
     mainWindow.webContents.send('volume-down')
   });
 
-  //Make a toggle for this
+ // Make a toggle for this (change to app shortcut, not global)
   // globalShortcut.register('Ctrl+R', function () {
   //   console.log('no reload')
   // });
   // globalShortcut.register('Ctrl+Shift+I', function () {
   //   console.log('no dev tools')
   // });
-  
+
   //Overlay commands
   ipcMain.on('overlay-play-pause', function(){
     mainWindow.webContents.send('play-pause-request')
@@ -130,7 +130,7 @@ function createWindow () {
   ipcMain.on('overlay-volume-down', function(){
     mainWindow.webContents.send('volume-down')
   })
-  
+
 mainWindow.webContents.executeJavaScript(`
 
 const topBarJS = document.createElement('script');
@@ -179,13 +179,12 @@ let mediaStatus =  'paused'
 //DISCORD RICH PRESENCE (new)
   mainWindow.webContents.on('media-started-playing', function(){
     mediaStatus = 'playing'
-  
-    if (discordRichPresence == "true"){
+
     mainWindow.webContents.send('request-song-data')
     ipcMain.on('requested-data', function(event, arg){
-  
       console.log(`Data arrived: Title: ${arg.title}, Artist: ${arg.artist}, Volume: ${arg.volume}, End Timestamp: ${arg.endTimestamp}` )
-  
+      
+      if (discordRichPresence == "true"){
       client.updatePresence({
         details: arg.title, //Song title
         state: arg.artist, //Artist
@@ -197,16 +196,17 @@ let mediaStatus =  'paused'
         smallImageText: 'Playing a song',
         instance: true,
       });
-  
+      }
+
       //store artist and title in case the user pauses the song or opens the overlay
       songTitle = arg.title
       songArtist = arg.artist
       playerVolume = arg.volume
       endTimestamp = arg.endTimestamp
       thumb = arg.thumb
-    });
-    }
-    
+      });
+
+
     mainWindow.webContents.on('media-paused', function(){
       mediaStatus = 'paused'
 
@@ -252,7 +252,7 @@ let mediaStatus =  'paused'
     ipcMain.on('requested-time-data', function(event, arg){
       overlay.send('requested-time-data', arg)
     })
-    
+
   })
 
 
@@ -282,8 +282,25 @@ ipcMain.on('closeApp:close', function(){
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+let tray = null
+let theme = 'dark'
+
 app.on('ready', () =>{
   createSplash()
+
+  tray = new Tray(`./assets/tray/tray-light.png`)
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'YouTube Music by DM', type: 'normal', icon: './assets/tray/tray-dark.png'},
+    { label: 'separator', type: 'separator'},
+    { label: 'Theme', icon: './assets/tray/theme-icon.png', 
+    submenu: [
+      {label: 'Light', type: 'radio'},
+      {label: 'Dark', type: 'radio'}
+    ]},
+    { label: 'Open Ovelay', accelerator: 'Alt + 1'}
+  ])
+  tray.setToolTip('YouTube Music by DM')
+  tray.setContextMenu(contextMenu)
 })
 
 // Quit when all windows are closed.

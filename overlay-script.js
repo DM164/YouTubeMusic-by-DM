@@ -1,8 +1,22 @@
 const { ipcRenderer } = require('electron')
 
+if (localStorage.getItem('first-time') === undefined){
+    localStorage.setItem('theme', 'dark')
+} else {
+    localStorage.setItem('first-time', false)
+}
+
 let volumeCache = '100%'
 let time = '0:00'
 let thumb = 'assets/overlay/artwork.png'
+let theme = localStorage.getItem('theme')
+
+//Checks what theme to use
+if (theme === 'light'){
+    document.querySelector('#theme').href='light-overlay.css'
+} else {
+    document.querySelector('#theme').href='dark-overlay.css'
+}
 
 document.querySelector('.play').addEventListener('click', function(){
     ipcRenderer.send('overlay-play-pause')
@@ -26,6 +40,18 @@ document.querySelector('.down').addEventListener('click', function(){
 
 document.querySelector('#open-app').addEventListener('click', function(){
     ipcRenderer.send('open-mainWindow');
+})
+//Button to change the theme
+document.querySelector('#switch').addEventListener('click', function(){
+    if (theme === 'dark'){
+        document.querySelector('#theme').href='light-overlay.css'
+        localStorage.setItem('theme', 'light')
+        theme = 'light'
+    } else {
+        document.querySelector('#theme').href='dark-overlay.css'
+        localStorage.setItem('theme', 'dark')
+        theme = 'dark'
+    }
 })
 
 setInterval(() => {

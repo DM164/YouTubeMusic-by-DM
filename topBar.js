@@ -40,7 +40,7 @@ document.querySelector('body').prepend(topBar);
 //Buttons on Top Bar
 document.getElementById("closeApp").addEventListener("click", function(){
     const window = remoteB.getCurrentWindow();
-    window.close();
+    window.hide();
 });
 document.getElementById("minimizeApp").addEventListener("click", function (e) {
     const window = remoteB.getCurrentWindow();

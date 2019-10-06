@@ -15,7 +15,7 @@ require('update-electron-app')({
 })
 
 //Discord rich presence client
-const client = require('discord-rich-presence')('611219815138590731');
+let client = require('discord-rich-presence')('611219815138590731');
 
 //Discord rich presence icons
 const largeImg = 'rpc_icon'
@@ -301,7 +301,8 @@ app.on('ready', () =>{
     { label: 'YouTube Music by DM', type: 'normal', icon: titleIcon, enabled: false},
     { label: 'separator', type: 'separator'},
     { label: 'Open App', type:'normal', icon: openAppIcon, click: function trayfunction1() { mainWindow.show() }},
-    { label: 'Kill DiscordRP', icon: KillDRP, click: function trayfunction2() { client.disconnect() }},
+    { label: 'Disconnect DiscordRP', icon: KillDRP, click: function trayfunction2() { client.disconnect() }},
+    { label: 'Reconnect DiscordRP', icon: KillDRP, click: function trayfunction4() { createNewPresence() }},
     { label: 'Open Overlay', accelerator: 'Alt + 1', icon: openOverlayIcon, click: function trayfunction3() { createNotification() }},
     { label: 'Quit App', accelerator: 'Ctrl + Q', icon: quitAppIcon, click: function(){ app.quit() }}
   ])
@@ -313,6 +314,18 @@ app.on('ready', () =>{
   //Insert menu
   Menu.setApplicationMenu(topMenu)
 })
+
+function createNewPresence() {
+  client = require('discord-rich-presence')('611219815138590731');
+  client.updatePresence({
+    details: 'Not listening to anything',
+    largeImageKey: largeImg,
+    largeImageText: largeImageText,
+    smallImageKey: 'menus',
+    smallImageText: 'In the menus',
+    instance: true,
+  })
+}
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {

@@ -32,7 +32,7 @@ ipcMain.on('send-DRPstatus', function(event, arg){
 })
 
 //Electron Client Version
-const ClientVersion = '0.7.0'
+const ClientVersion = '0.7.1'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

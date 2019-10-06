@@ -3,7 +3,7 @@ const { ipcRenderer } = require('electron')
 let firstStart = localStorage.getItem('firstStart') || 'true'
 
 //Version of the latest client
-const latestClient = '0.7.0'
+const latestClient = '0.7.1'
 
 //Discord Rich Presence LocalStorage
 if (firstStart == 'true'){

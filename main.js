@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, globalShortcut, shell, dialog, Tray, Menu, nativeTheme } = require('electron')
+const { app, BrowserWindow, ipcMain, globalShortcut, shell, dialog, Tray, Menu } = require('electron')
 const path = require('path')
 
 // Disable error dialogs
@@ -307,6 +307,11 @@ app.on('ready', () =>{
   ])
   tray.setToolTip('YouTube Music by DM')
   tray.setContextMenu(contextMenu)
+
+  //Build menu from template
+  const topMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  //Insert menu
+  Menu.setApplicationMenu(topMenu)
 })
 
 // Quit when all windows are closed.
@@ -398,7 +403,47 @@ function createNotification() {
     notification = null
   })
 }
+function createYTWindow() {
+  // Create the browser window.
+  YTWindow = new BrowserWindow({
+    width: 1100,
+    height: 700,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true
+    },
+  })
+
+  YTWindow.loadURL('https://www.youtube.com/')
+
+  YTWindow.on('closed', function () {
+    YTWindow = null
+  })
+}
 
 ipcMain.on('versionCheck', function(){
   mainWindow.webContents.send('versionCheckAnswer', ClientVersion)
 })
+
+// New top menu template (edit, view, ect.) (we used it for shortcuts), only for pruduction
+const mainMenuTemplate = [
+  {
+      label:'App',
+      submenu:[
+          {
+            label: 'Quit',
+            accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q', //shortcut to quit, checks if the app is running on win32 or on darwin(MacOS)
+            click(){
+                app.quit();
+            }
+          },
+          {
+            label: 'Open YouTube',
+            accelerator: 'Alt + 3',
+            click(){
+                createYTWindow();
+            }
+          }
+      ]
+  }
+]

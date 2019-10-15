@@ -16,7 +16,6 @@ body {
     height: 86px;
     width: 20%;
     border-radius: 4px 4px 0px 0px;
-    animation-delay: 1s;
     animation: slide-in 1s forwards;
     top: 24px;
     box-shadow: 3px 3px 8px #00000048;
@@ -29,7 +28,6 @@ body {
     height: 86px;
     width: 20%;
     border-radius: 4px 4px 0px 0px;
-    animation-delay: 1s;
     animation: slide-in 1s forwards;
     left: 50%;
     top: 24px;
@@ -181,6 +179,28 @@ body {
     background: #e2e2e2;
     cursor: pointer;
 }
+.circle {
+    position: absolute;
+    background: #a5a5a5;
+    height: 10px;
+    width: 10px;
+    margin: 1px 0px 0px -12px;
+    border-radius: 50%;
+}
+h1.DRPStatus-text {
+    margin-left: 3px;
+}
+.DRPStatus {
+    color: #424242;
+    font-family: 'Roboto';
+    background: #eaeaea;
+    padding: 3px 10px 3px 16px;
+    margin: 6px;
+    border-radius: 10px;
+    float: right;
+    font-size: 12px;
+    transition: all 0.2s;
+}
 
 .overlay-controls.below-right {
     height: 30px;
@@ -240,8 +260,10 @@ p.volume.value {
 
 
 @keyframes slide-in {
-    0%{ transform: translateY(-800px) }
-    60%{ transform: translateY(10px) }
+    0%{ transform: translateY(-800px); opacity: 0; }
+    40%{  opacity: 0; }
+    50%{  opacity: 6; }
+    60%{ transform: translateY(10px); opacity: 1; }
     80%{ transform: translateY(-3px) }
     100%{ transform: translateY(0px) }
 }

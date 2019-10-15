@@ -3,7 +3,7 @@ const { ipcRenderer } = require('electron')
 let firstStart = localStorage.getItem('firstStart') || 'true'
 
 //Version of the latest client
-const latestClient = '0.7.1'
+let latestClient = localStorage.getItem('latestRelease')
 
 //Discord Rich Presence LocalStorage
 if (firstStart == 'true'){
@@ -70,7 +70,7 @@ settingsTrigger.addEventListener('click', function(){
 
         const DPRDescription = document.createElement('p');
         DPRDescription.setAttribute('class', 'DRPDesc')
-        DPRDescription.innerText= 'Decide whether or not to show what you are listening to on Discord. (Requires a restart)'
+        DPRDescription.innerText= 'Turn off Discord Rich Presence by default. (Requires a restart)'
 
         //DRP Switch (ON / OFF)
         const DRPSwitch = document.createElement('div');
@@ -94,7 +94,7 @@ settingsTrigger.addEventListener('click', function(){
 
         //Settings javascript file
         const settingsJs = document.createElement('script');
-        settingsJs.setAttribute('src', 'https://dl.dropbox.com/s/5utxjsqw486h4vp/settings.js?dl=0')
+        settingsJs.setAttribute('src', 'https://dl.dropbox.com/s/cd01f9kex4ehxp0/settings.js?dl=0')
         document.querySelector('body').appendChild(settingsJs);
 
         opened = true
@@ -102,9 +102,6 @@ settingsTrigger.addEventListener('click', function(){
         return console.log('opened is true')
     }
 });
-
-// Get timestamp from HTML document
-// document.querySelector(".time-info.ytmusic-player-bar").innerText
 
 ipcRenderer.on('request-song-data', function(){
     setTimeout(() => {
@@ -199,8 +196,8 @@ checkClientVersion()
 function checkClientVersion(){
     ipcRenderer.send('versionCheck')
     ipcRenderer.on('versionCheckAnswer', function(event, arg){
-        if (arg >= latestClient){
-            console.log('Client up to date')//TODO: create a popup window and save how many times it poped up
+        if (arg == latestClient){
+            console.log('Client up to date')
         } else {
             setTimeout(() => {
                 document.getElementById('notification').style.display='block'

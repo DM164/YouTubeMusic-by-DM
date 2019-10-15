@@ -23,7 +23,7 @@ document.querySelector('.DRPSwitch').addEventListener('click', function(){
         document.querySelector('.DRPindicator').setAttribute('class', 'DRPindicator DRPactive');
         localStorage.setItem('DRP', true);
     }
-    
+    ipcRenderer.send('relaunch-app')
     console.log(`DRPvalue is "${DRPvalue}"`);
 })
 

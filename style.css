@@ -23,8 +23,8 @@ paper-icon-button.ytmusic-settings-button {
 }
 .center-content.ytmusic-nav-bar, #nav-bar-background.ytmusic-app-layout {
     background: #0e0e0e;
-    margin-right: -6px;
-    width: 101%;
+    margin-right: -12px;
+    width: 102%;
 }
 #sections.ytd-multi-page-menu-renderer > *.ytd-multi-page-menu-renderer {
     padding: 4px 0;
@@ -40,7 +40,7 @@ paper-icon-button.ytmusic-settings-button {
     margin-top: -28px;
     height: 14px;
     width: 78px;
-    margin-right: 64px;
+    margin-right: 74px;
     padding-left: 64px;
     border-radius: 0%;
 }
@@ -278,7 +278,7 @@ img.notification-img {
     transition: 0.3s;
     pointer-events: all;
     position: fixed;
-    right: -5px;
+    right: 0px;
 }
 #maximizeApp {
     -webkit-app-region: no-drag;
@@ -292,7 +292,7 @@ img.notification-img {
     transition: 0.3s;
     pointer-events: all;
     position: fixed;
-    right: 21px;
+    right: 26px;
 }
 #minimizeApp {
     -webkit-app-region: no-drag;
@@ -306,7 +306,7 @@ img.notification-img {
     border-radius: 0px 0px 0px 4px;
     pointer-events: all;
     position: fixed;
-    right: 47px;
+    right: 52px;
 }
 #accountArea {
     width: 90px;
@@ -316,7 +316,7 @@ img.notification-img {
     border-radius: 0px 0px 5px 5px;
     margin-right: 10px;
     position: fixed;
-    right: 73px;
+    right: 84px;
 }
 p.top {
     color: white;
@@ -341,7 +341,7 @@ p.top {
     margin-top: 22px;
 }
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 2px;
 }
 ::-webkit-scrollbar-thumb {
     background: #272727 !important;

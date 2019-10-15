@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Notification</title>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="warning.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="topBarWarning">
+        <img src="./assets/tray/tray-title-icon.png">
+        <p>YouTube Music by DM</p>
+    </div>
+    <div class="warning-body">
+        <h1 class="warning-text">Do you want to quit the app?</h1>
+    </div>
+    <div class="warning-buttons">
+        <button id="no-button">No</button>
+        <button id="close">Yes</button>
+    </div>
+
+    <script defer>
+        const { ipcRenderer } = require('electron')
+
+        ipcRenderer.on('data-warning', function(event, arg){
+            if (arg === 'In order to change this option you are going to have to restart the app.'){
+                document.querySelector('.warning-text').innerText=arg
+
+                document.getElementById('no-button').innerText='Not now'
+                document.getElementById('close').innerText='Restart now'
+                document.getElementById('close').addEventListener('click', function(){
+                    ipcRenderer.send('relaunch-app:confirmed')
+                })
+                document.getElementById('no-button').addEventListener('click', function(){
+                    window.close()
+                })
+            } else {
+                document.querySelector('.warning-text').innerText=arg
+            }
+        });
+        
+        document.getElementById('close').addEventListener('click', function(){
+            ipcRenderer.send('closeApp:close')
+        })
+        document.getElementById('no-button').addEventListener('click', function(){
+            window.close()
+        })
+    </script>
+</body>
+</html>

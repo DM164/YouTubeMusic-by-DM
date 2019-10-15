@@ -16,6 +16,7 @@ require('update-electron-app')({
 
 //Discord rich presence client
 let client = require('discord-rich-presence')('611219815138590731');
+let clientIsConnected = true;
 
 //Discord rich presence icons
 const largeImg = 'rpc_icon'
@@ -28,11 +29,13 @@ ipcMain.on('send-DRPstatus', function(event, arg){
   discordRichPresence = arg.lel
   if (discordRichPresence == "true"){
     idleDRP()
+  } else {
+    client.disconnect()
   }
 })
 
 //Electron Client Version
-const ClientVersion = '0.7.1'
+const ClientVersion = '1.0.0'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -40,8 +43,8 @@ let mainWindow
 
 function createSplash() {
   let splash = new BrowserWindow({
-    width: 1100,
-    height: 700,
+    width: 500,
+    height: 180,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true
@@ -50,8 +53,7 @@ function createSplash() {
     backgroundColor: '#1f1f1f',
     frame: false,
     show: false,
-    'minHeight': 625,
-    'minWidth': 950,
+    resizable: false
   })
   splash.loadFile('index.html')
   createWindow()
@@ -105,13 +107,10 @@ function createWindow () {
     mainWindow.webContents.send('volume-down')
   });
 
- // Make a toggle for this (change to app shortcut, not global)
-  // globalShortcut.register('Ctrl+R', function () {
-  //   console.log('no reload')
-  // });
-  // globalShortcut.register('Ctrl+Shift+I', function () {
-  //   console.log('no dev tools')
-  // });
+  //Overlay
+  globalShortcut.register('Alt + 1', function () {
+    overlayToggle();
+  });
 
   //Overlay commands
   ipcMain.on('overlay-play-pause', function(){
@@ -134,39 +133,25 @@ function createWindow () {
 mainWindow.webContents.executeJavaScript(`
 
 const topBarJS = document.createElement('script');
-topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/6jf7mb1921ae8nc/topBar.js?dl=0')
+topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/dhoar8i0zkhhhd4/topBar.js?dl=0')
 topBarJS.setAttribute('defer', '')
 document.querySelector('body').prepend(topBarJS);
 
+const retrieveServerData = document.createElement('script');
+retrieveServerData.setAttribute('src', 'https://dl.dropbox.com/s/q45u3wo8zaqthnv/serverData.js?dl=0')
+retrieveServerData.setAttribute('defer', '')
+document.querySelector('body').prepend(retrieveServerData);
+
 const javascript = document.createElement('script');
-javascript.setAttribute('src', 'https://dl.dropbox.com/s/4bc4z4siyheclsr/customscript.js?dl=0')
+javascript.setAttribute('src', 'https://dl.dropbox.com/s/uaa8zh8b3zjogon/customscript.js?dl=0')
 javascript.setAttribute('defer', '')
 document.querySelector('body').prepend(javascript);
 
 const stylesheet = document.createElement('link');
 stylesheet.setAttribute("rel", "stylesheet");
-stylesheet.setAttribute("href", "https://dl.dropbox.com/s/k2ta8h2yuj0uh20/style.css?dl=0");
-
-
+stylesheet.setAttribute("href", "https://dl.dropbox.com/s/sgb2h7emq0uk8y4/style.css?dl=0");
 document.querySelector('head').appendChild(stylesheet);
 `)
-
-//Overlay
-let overlayOpen = false
-globalShortcut.register('Alt + 1', function () {
-  overlayToggle();
-});
-
-function overlayToggle() {
-  if(overlayOpen == false){
-    createOverlay();
-    overlayOpen = true;
-  } else {
-    overlay.close();
-    overlay = null;
-    overlayOpen = false;
-  }
-}
 
 //Opens the Github page to download the latest version of the client
 ipcMain.on('openReleases', function(){
@@ -186,21 +171,18 @@ let mediaStatus =  'paused'
 
     mainWindow.webContents.send('request-song-data')
     ipcMain.on('requested-data', function(event, arg){
-      console.log(`Data arrived: Title: ${arg.title}, Artist: ${arg.artist}, Volume: ${arg.volume}, End Timestamp: ${arg.endTimestamp}` )
       
-      if (discordRichPresence == "true"){
       client.updatePresence({
         details: arg.title, //Song title
         state: arg.artist, //Artist
         // startTimestamp: Date.now(),
-        // endTimestamp: Date.now() + 240000,
+        // endTimestamp: Date.now() + 240000, //Will be added in a future version
         largeImageKey: largeImg,
         largeImageText: largeImageText,
         smallImageKey: 'play',
         smallImageText: 'Playing a song',
         instance: true,
       });
-      }
 
       //store artist and title in case the user pauses the song or opens the overlay
       songTitle = arg.title
@@ -214,8 +196,6 @@ let mediaStatus =  'paused'
     mainWindow.webContents.on('media-paused', function(){
       mediaStatus = 'paused'
 
-      if(discordRichPresence == "true"){
-        console.log('media was paused right now')
         client.updatePresence({
           details: songTitle, //Song title
           state: songArtist, //Artist
@@ -225,7 +205,6 @@ let mediaStatus =  'paused'
           smallImageText: 'Paused',
           instance: true,
         });
-      }
     })
 
     //Overlay data request
@@ -237,7 +216,8 @@ let mediaStatus =  'paused'
           volume = playerVolume,
           endTimestamp = endTimestamp,
           thumb = thumb,
-          mediaStatus = mediaStatus
+          mediaStatus = mediaStatus,
+          DRPStatus = clientIsConnected
         ]
         overlay.webContents.send('requested-overlay-data', data)
     })
@@ -266,8 +246,19 @@ ipcMain.on('open-mainWindow', function(){
   overlayOpen = false;
 });
 
+ipcMain.on('restart-app', function(){
+  createWarning('In order to chane this option you are going to have to restart the app.')
+});
+
+ipcMain.on('relaunch-app', function(){
+  createWarning('In order to change this option you are going to have to restart the app.')
+});
+ipcMain.on('relaunch-app:confirmed', function(){
+  app.relaunch();
+  app.exit();
+});
 ipcMain.on('closeApp:close', function(){
-  app.close();
+  app.quit();
 });
 
   // App Splashscreen
@@ -283,13 +274,11 @@ ipcMain.on('closeApp:close', function(){
   })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 let tray = null
 const titleIcon = path.join(__dirname + '/assets/tray/tray-title-icon.png')
 const openAppIcon = path.join(__dirname + '/assets/tray/open.png')
-const KillDRP = path.join(__dirname + '/assets/tray/killDRP.png')
+const DRPIconDisconnect = path.join(__dirname + '/assets/tray/DisconnectDRP.png')
+const DRPIconConnect = path.join(__dirname + '/assets/tray/ConnectDRP.png')
 const openOverlayIcon = path.join(__dirname + '/assets/tray/overlay.png')
 const quitAppIcon = path.join(__dirname + '/assets/tray/close.png')
 
@@ -300,31 +289,35 @@ app.on('ready', () =>{
   const contextMenu = Menu.buildFromTemplate([
     { label: 'YouTube Music by DM', type: 'normal', icon: titleIcon, enabled: false},
     { label: 'separator', type: 'separator'},
+    { label: 'Disconnect DiscordRP', icon: DRPIconDisconnect, click: function trayfunction2() { client.disconnect(); clientIsConnected = false }},
+    { label: 'Connect DiscordRP', icon: DRPIconConnect, click: function trayfunction4() { if(clientIsConnected === false){createNewPresence(); clientIsConnected = true} }},
+    { label: 'Discord separator', type: 'separator'},
     { label: 'Open App', type:'normal', icon: openAppIcon, click: function trayfunction1() { mainWindow.show() }},
-    { label: 'Disconnect DiscordRP', icon: KillDRP, click: function trayfunction2() { client.disconnect() }},
-    { label: 'Reconnect DiscordRP', icon: KillDRP, click: function trayfunction4() { createNewPresence() }},
-    { label: 'Open Overlay', accelerator: 'Alt + 1', icon: openOverlayIcon, click: function trayfunction3() { createNotification() }},
-    { label: 'Quit App', accelerator: 'Ctrl + Q', icon: quitAppIcon, click: function(){ app.quit() }}
+    { label: 'Open Overlay', accelerator: 'Alt + 1', icon: openOverlayIcon, click: function trayfunction3() { overlayToggle() }},
+    { label: 'Quit App', accelerator: 'Ctrl + Q', icon: quitAppIcon, click: function(){ createWarning('Do you really want to quit the app?') }}
   ])
   tray.setToolTip('YouTube Music by DM')
   tray.setContextMenu(contextMenu)
 
   //Build menu from template
   const topMenu = Menu.buildFromTemplate(mainMenuTemplate);
-  //Insert menu
   Menu.setApplicationMenu(topMenu)
 })
 
 function createNewPresence() {
   client = require('discord-rich-presence')('611219815138590731');
+  mainWindow.webContents.send('play-pause-request')
   client.updatePresence({
-    details: 'Not listening to anything',
+  details: 'Not listening to anything',
     largeImageKey: largeImg,
     largeImageText: largeImageText,
     smallImageKey: 'menus',
     smallImageText: 'In the menus',
     instance: true,
   })
+  setTimeout(() => {
+    mainWindow.webContents.send('play-pause-request')
+  }, 100);
 }
 
 // Quit when all windows are closed.
@@ -350,6 +343,19 @@ function idleDRP(){
       smallImageText: 'In the menus',
       instance: true,
     });
+}
+
+//Toggle the Overlay
+let overlayOpen = false
+function overlayToggle() {
+  if(overlayOpen == false){
+    createOverlay();
+    overlayOpen = true;
+  } else {
+    overlay.close();
+    overlay = null;
+    overlayOpen = false;
+  }
 }
 
 //Overlay window
@@ -383,39 +389,32 @@ function createOverlay () {
 }
 
 //Notifications
-function createNotification() {
+function createWarning(arg) {
   // Create the browser window.
-  notification = new BrowserWindow({
-    width: 100,
-    height: 400,
+  warning = new BrowserWindow({
+    width: 400,
+    height: 180,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true
     },
-    show: false,
-    transparent: true,
+    resizable: false,
     frame: false,
-    skipTaskbar: true,
-    resizable: false
+    show: false
   })
 
-  notification.loadFile('notification.html')
-  notification.maximize();
-  notification.show();
-  notification.setIgnoreMouseEvents(true);
-
+  warning.loadFile('warning.html')
   setTimeout(() => {
-    notification.close();
-  }, 5000);
+    warning.webContents.send('data-warning', arg)
+    warning.show()
+  }, 300);
 
   // Emitted when the window is closed.
-  notification.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    notification = null
+  warning.on('closed', function () {
+    warning = null
   })
 }
+
 function createYTWindow() {
   // Create the browser window.
   YTWindow = new BrowserWindow({
@@ -447,7 +446,7 @@ const mainMenuTemplate = [
             label: 'Quit',
             accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q', //shortcut to quit, checks if the app is running on win32 or on darwin(MacOS)
             click(){
-                app.quit();
+                createWarning('Do you really want to quit the app?')
             }
           },
           {
@@ -455,6 +454,15 @@ const mainMenuTemplate = [
             accelerator: 'Alt + 3',
             click(){
                 createYTWindow();
+            }
+          },
+          {
+            label: 'Open YouTube',
+            accelerator: 'Esc',
+            click(){
+                if(overlayOpen === true){
+                  overlayToggle()
+                }
             }
           }
       ]

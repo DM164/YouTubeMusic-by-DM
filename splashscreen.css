@@ -18,11 +18,10 @@ body{
 .logo {
     position: absolute;
     top: 50%;
-    left: 50%;
-    width: 150px;
-    height: 150px;
-    margin-top: -75px;
-    margin-left: -75px;
+    left: 40px;
+    width: 110px;
+    height: 110px;
+    margin-top: -55px;
     z-index: 1;
     -webkit-user-drag: none;
     border-radius: 50%;
@@ -34,9 +33,7 @@ body{
     font-family: 'Roboto';
     display: inline-block;
     top: 80%;
-    left: 50%;
-    width: 150px;
-    height: 150px;
+    left: 64%;
     margin-top: -75px;
     margin-left: -75px;
     animation: text-fade-in 4s forwards;
@@ -52,9 +49,9 @@ body{
 }
 
 @keyframes fade-in {
-    0%{ box-shadow: 0 0 20px 16px transparent;}
-    10%{ box-shadow: 0 0 20px 16px transparent;}
-    60%{ box-shadow: 0 0 20px 16px #610000; }
+    0%{ box-shadow: 0 0 20px 16px transparent; }
+    10%{ box-shadow: 0 0 20px 16px transparent; }
+    60%{ box-shadow: 0 0 20px 4px #ffffff7a; }
     100%{ box-shadow: 0 0 20px 16px transparent; }
 }
 @keyframes text-fade-in {

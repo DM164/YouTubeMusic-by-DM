@@ -57,10 +57,8 @@ document.querySelector('#switch').addEventListener('click', function(){
 setInterval(() => {
     ipcRenderer.send('request-volume-data')
     ipcRenderer.send('request-time-data')
-}, 100);
-setInterval(() => {
     ipcRenderer.send('request-overlay-data')
-}, 1000);
+}, 100);
 
 ipcRenderer.on('requested-time-data', function(event, arg){
     if (arg == undefined){
@@ -87,6 +85,15 @@ ipcRenderer.on('requested-overlay-data', function(event, arg){
         //nothing
     } else {
         thumb = arg[4]
+    }
+})
+ipcRenderer.on('requested-overlay-data', function(event, arg){
+    if (arg[6] === false || arg[6] === null || arg[6] === undefined){
+        document.querySelector('.DRPStatus-text').innerText='Discord is disconnected'
+        document.querySelector('.circle').style.background='#d23636'
+    } else {
+        document.querySelector('.DRPStatus-text').innerText='Discord is connected'
+        document.querySelector('.circle').style.background='#45d471'
     }
 })
 ipcRenderer.on('requested-overlay-data', function(event, arg){

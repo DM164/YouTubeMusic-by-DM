@@ -31,6 +31,7 @@ ipcMain.on('send-DRPstatus', function(event, arg){
     idleDRP()
   } else {
     client.disconnect()
+    clientIsConnected = false;
   }
 })
 

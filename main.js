@@ -7,12 +7,12 @@ dialog.showErrorBox = function(title, content) {
     console.log(`${title}\n${content}`);
 };
 
+//Production
+process.env.NODE_ENV='production'
+
 //Update the app automatically NOT WORKING ATM
-require('update-electron-app')({
-  repo: 'DM164/Unoffical-YouTube-Music-App',
-  updateInterval: '1 hour',
-  notifyUser: true
-})
+const { autoUpdater } = require("electron-updater")
+autoUpdater.checkForUpdatesAndNotify()
 
 //Discord rich presence client
 let client = require('discord-rich-presence')('611219815138590731');

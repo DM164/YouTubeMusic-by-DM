@@ -15,13 +15,11 @@
   "license": "CC0-1.0",
   "devDependencies": {
     "electron": "^5.0.8",
-    "electron-installer-dmg": "^3.0.0",
-    "electron-packager": "^14.0.4",
-    "electron-winstaller": "^4.0.0"
+    "electron-packager": "^14.0.4"
   },
   "dependencies": {
     "discord-rich-presence": "0.0.8",
-    "update-electron-app": "^1.5.0"
+    "electron-updater": "^4.1.2"
   },
   "build": {
     "appId": "your.id",

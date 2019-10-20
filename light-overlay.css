@@ -56,6 +56,10 @@ body {
     z-index: -1;
     line-height: 37px;
 }
+.title:hover {
+    animation-delay: 3s;
+    animation: slide-title 10s infinite;
+}
 .artist {
     color: #464646;
     position: absolute;

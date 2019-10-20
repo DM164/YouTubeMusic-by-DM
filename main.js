@@ -51,7 +51,7 @@ function createSplash() {
       nodeIntegration: true
     },
     icon: __dirname + '/assets/icons/png/icon.png',
-    backgroundColor: '#1f1f1f',
+    backgroundColor: '#000000',
     frame: false,
     show: false,
     resizable: false

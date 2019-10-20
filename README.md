@@ -11,6 +11,10 @@ Installing YouTube Music by DM is pretty easy here are all the steps you have to
 1. Download the Windows `.zip` file from [releases](https://github.com/DM164/YouTubeMusic-by-DM/releases) and unzip it.
 2. Drag the `YouTube Music by DM` folder wherever you want (ex. C:\Program Files (x86))
 3. Open the `.exe` file inside and enjoy the app.
+#### MacOS
+Coming soon
+#### Linux
+Coming soon
 
 ![Home screen](https://i.imgur.com/KiNgRxu.png)
 

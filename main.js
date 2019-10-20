@@ -101,10 +101,10 @@ function createWindow () {
     createNotification()
     console.log('mediastop pressed');
   });
-  globalShortcut.register('Ctrl+Up', function () {
+  globalShortcut.register('CommandOrControl+Up', function () {
     mainWindow.webContents.send('volume-up')
   });
-  globalShortcut.register('Ctrl+Down', function () {
+  globalShortcut.register('CommandOrControl+Down', function () {
     mainWindow.webContents.send('volume-down')
   });
 
@@ -295,7 +295,7 @@ app.on('ready', () =>{
     { label: 'Discord separator', type: 'separator'},
     { label: 'Open App', type:'normal', icon: openAppIcon, click: function trayfunction1() { mainWindow.show() }},
     { label: 'Open Overlay', accelerator: 'Alt + 1', icon: openOverlayIcon, click: function trayfunction3() { overlayToggle() }},
-    { label: 'Quit App', accelerator: 'Ctrl + Q', icon: quitAppIcon, click: function(){ createWarning('Do you really want to quit the app?') }}
+    { label: 'Quit App', accelerator: 'CommandOrControl + Q', icon: quitAppIcon, click: function(){ createWarning('Do you really want to quit the app?') }}
   ])
   tray.setToolTip('YouTube Music by DM')
   tray.setContextMenu(contextMenu)

@@ -8,9 +8,13 @@ What features does this app have?
 ### How to install
 Installing YouTube Music by DM is pretty easy here are all the steps you have to follow in order to install the app correctly:
 #### Windows
-1. Download the Windows ```.zip``` file from [releases](https://github.com/DM164/YouTubeMusic-by-DM/releases) and unzip it.
-2. Drag the ```YouTube Music by DM``` folder wherever you want (ex. C:\Program Files (x86))
-3. Open the exe file inside and enjoy the app.
+1. Download the Windows `.zip` file from [releases](https://github.com/DM164/YouTubeMusic-by-DM/releases) and unzip it.
+2. Drag the `YouTube Music by DM` folder wherever you want (ex. C:\Program Files (x86))
+3. Open the `.exe` file inside and enjoy the app.
+#### MacOS
+Coming soon
+#### Linux
+Coming soon
 
 ![Home screen](https://i.imgur.com/KiNgRxu.png)
 
@@ -24,16 +28,16 @@ With the tray icon you can also open the overlay, the app or quit the app comple
 > ![System Tray Icon](https://i.imgur.com/CWpJwiG.png)
 
 ### Overlay
-With the convenient and gorgeous looking overlay you can control your music from everywhere on your PC by pressing ```ALT + 1```.
+With the convenient and gorgeous looking overlay you can control your music from everywhere on your PC by pressing `ALT + 1`.
 > ![Overlay](https://i.imgur.com/wE68qLv.png)
 
 ### Mediakeys & Shortcuts
 Keys | Function
 ------------ | -------------
-```ALT``` + ```1``` | Open the overlay
-```CTRL``` or ```CMD``` + ```Q``` | Quit the app
-```Play/Pause``` | Well... you know
-```Skip``` | You know this one too...
-```Previous``` | Yep, it does exactly what it says
-```CTRL``` or ```CMD``` + ```KEYUP``` | Volume up
-```CTRL``` or ```CMD``` + ```KEYDOWN``` | Volume down
+`ALT` + `1` | Open the overlay
+`CTRL` or `CMD` + `Q` | Quit the app
+`Play/Pause` | Well... you know
+`Skip` | You know this one too...
+`Previous` | Yep, it does exactly what it says
+`CTRL` or `CMD` + `KEYUP` | Volume up
+`CTRL` or `CMD` + `KEYDOWN` | Volume down

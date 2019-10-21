@@ -131,28 +131,30 @@ function createWindow () {
     mainWindow.webContents.send('volume-down')
   })
 
-mainWindow.webContents.executeJavaScript(`
-
-const topBarJS = document.createElement('script');
-topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/dhoar8i0zkhhhd4/topBar.js?dl=0')
-topBarJS.setAttribute('defer', '')
-document.querySelector('body').prepend(topBarJS);
-
-const retrieveServerData = document.createElement('script');
-retrieveServerData.setAttribute('src', 'https://dl.dropbox.com/s/q45u3wo8zaqthnv/serverData.js?dl=0')
-retrieveServerData.setAttribute('defer', '')
-document.querySelector('body').prepend(retrieveServerData);
-
-const javascript = document.createElement('script');
-javascript.setAttribute('src', 'https://dl.dropbox.com/s/uaa8zh8b3zjogon/customscript.js?dl=0')
-javascript.setAttribute('defer', '')
-document.querySelector('body').prepend(javascript);
-
-const stylesheet = document.createElement('link');
-stylesheet.setAttribute("rel", "stylesheet");
-stylesheet.setAttribute("href", "https://dl.dropbox.com/s/sgb2h7emq0uk8y4/style.css?dl=0");
-document.querySelector('head').appendChild(stylesheet);
-`)
+  mainWindow.webContents.on('dom-ready', function(){
+    mainWindow.webContents.executeJavaScript(`
+    
+    const topBarJS = document.createElement('script');
+    topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/dhoar8i0zkhhhd4/topBar.js?dl=0')
+    topBarJS.setAttribute('defer', '')
+    document.querySelector('body').prepend(topBarJS);
+    
+    const retrieveServerData = document.createElement('script');
+    retrieveServerData.setAttribute('src', 'https://dl.dropbox.com/s/q45u3wo8zaqthnv/serverData.js?dl=0')
+    retrieveServerData.setAttribute('defer', '')
+    document.querySelector('body').prepend(retrieveServerData);
+    
+    const javascript = document.createElement('script');
+    javascript.setAttribute('src', 'https://dl.dropbox.com/s/uaa8zh8b3zjogon/customscript.js?dl=0')
+    javascript.setAttribute('defer', '')
+    document.querySelector('body').prepend(javascript);
+    
+    const stylesheet = document.createElement('link');
+    stylesheet.setAttribute("rel", "stylesheet");
+    stylesheet.setAttribute("href", "https://dl.dropbox.com/s/sgb2h7emq0uk8y4/style.css?dl=0");
+    document.querySelector('head').appendChild(stylesheet);
+    `)
+  })
 
 //Opens the Github page to download the latest version of the client
 ipcMain.on('openReleases', function(){

@@ -13,7 +13,7 @@ You can also use the installer now!
 2. Drag the `YouTube Music by DM` folder wherever you want (ex. C:\Program Files (x86))
 3. Open the `.exe` file inside and enjoy the app.
 #####Where does it get installed?
-The app is installed in `%appdata%` under `Roaming`.
+The app is installed in `%appdata%` under `Roaming` and the `.exe file` under `Local`.
 
 #### MacOS
 Coming soon `support canceled at the moment`

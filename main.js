@@ -36,7 +36,7 @@ ipcMain.on('send-DRPstatus', function(event, arg){
 })
 
 //Electron Client Version
-const ClientVersion = '1.0.0'
+const ClientVersion = '1.1.0'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -66,7 +66,7 @@ function createSplash() {
       mainWindow.show()
       splash.close();
       splash = null;
-    }, 4000);
+    }, 2000);
   })
 }
 
@@ -129,6 +129,10 @@ function createWindow () {
   })
   ipcMain.on('overlay-volume-down', function(){
     mainWindow.webContents.send('volume-down')
+  })
+
+  ipcMain.on('overlay-close', function(){
+    overlayToggle()
   })
 
   mainWindow.webContents.on('dom-ready', function(){

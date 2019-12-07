@@ -41,6 +41,12 @@ document.querySelector('.down').addEventListener('click', function(){
 document.querySelector('#open-app').addEventListener('click', function(){
     ipcRenderer.send('open-mainWindow');
 })
+document.getElementsByTagName('body')[0].addEventListener('click', (e) => {
+    if (e.target.className === 'close-overlay'){
+        ipcRenderer.send('overlay-close')
+    }
+})
+
 //Button to change the theme
 document.querySelector('#switch').addEventListener('click', function(){
     if (theme === 'dark'){

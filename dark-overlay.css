@@ -9,6 +9,12 @@ body {
     animation-delay: 0.5s;
     animation: blend-in 0.5s ease;
 }
+.close-overlay{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+}
 .overlay-controls {
     position: fixed;
     background: #2E2E2E;
@@ -52,13 +58,10 @@ body {
     max-height: 38px;
     width: 1000px;
     animation: slide-title 10s forwards;
-    animation-delay: 3s;
+    animation-iteration-count: 3;
+    animation-delay: 2s;
     z-index: -1;
     line-height: 37px;
-}
-.title:hover {
-    animation-delay: 3s;
-    animation: slide-title 10s infinite;
 }
 .artist {
     color: #949494;

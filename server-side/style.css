@@ -26,12 +26,6 @@ paper-icon-button.ytmusic-settings-button {
     margin-right: -12px;
     width: 102%;
 }
-#sections.ytd-multi-page-menu-renderer > *.ytd-multi-page-menu-renderer {
-    padding: 4px 0;
-}
-ytd-active-account-header-renderer {
-    height: 70px;
-}
 ytmusic-item-section-renderer.stuck #header.ytmusic-item-section-renderer {
     background-color: #0a0a0a;
 }
@@ -170,6 +164,10 @@ h1.AppSettingsTitle {
 }
 .signin-card #email-display {
     color: rgb(160, 160, 160);
+}
+#contentWrapper.iron-dropdown > * {
+    overflow: auto;
+    max-height: none !important;
 }
 
 /* Settings DRP */

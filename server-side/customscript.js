@@ -104,8 +104,6 @@ settingsTrigger.addEventListener('click', function(){
 });
 
 ipcRenderer.on('request-song-data', function(){
-    setTimeout(() => {
-
         let rawTimestamp = document.querySelector(".time-info.ytmusic-player-bar").innerText;
         endTimestamp = rawTimestamp.substr(7);
 
@@ -129,7 +127,6 @@ ipcRenderer.on('request-song-data', function(){
             thumb: thumbVar
         }
         ipcRenderer.send('requested-data', data);
-    }, 1000);
 });
 
 //Media control

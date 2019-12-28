@@ -46,6 +46,13 @@ ytmusic-app-layout[player-visible_] #player-bar-background.ytmusic-app-layout {
     visibility: visible;
     margin-right: -6px;
 }
+ytmusic-detail-header-renderer {
+    background: #0E0E0E;
+}
+#contents.ytmusic-section-list-renderer {
+    background-image: url(https://www.dropbox.com/s/p2dz3n4e9xluddx/background-pattern.png?raw=1);
+    background-size: contain;
+}
 
 /* App settings */
 .appSettings {

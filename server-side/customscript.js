@@ -116,7 +116,11 @@ ipcRenderer.on('request-song-data', function(){
             artistVar = artistVar.substr(57)
             artistVar = artistVar.substring(0, artistVar.length - 7);
         } else {
-            artistVar = document.getElementsByClassName("byline-wrapper")[25].outerText
+            let artistVarAudioOnly = document.getElementsByClassName("byline-wrapper")[25].outerText
+            if (artistVarAudioOnly.length > 85){
+                artistVarAudioOnly = artistVarAudioOnly.slice(0, -20) + '...'
+            }
+            artistVar = artistVarAudioOnly
         }
 
         let data = {

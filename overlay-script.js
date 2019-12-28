@@ -60,6 +60,11 @@ document.querySelector('#switch').addEventListener('click', function(){
     }
 })
 
+//Button to open next playing view
+document.querySelector('#more').addEventListener('click', function(){
+    document.getElementsByClassName('overlay-next-playing')[0].style.display='block'
+})
+
 setInterval(() => {
     ipcRenderer.send('request-volume-data')
     ipcRenderer.send('request-time-data')

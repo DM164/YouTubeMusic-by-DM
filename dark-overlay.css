@@ -182,6 +182,22 @@ body {
     background: #3d3d3d;
     cursor: pointer;
 }
+#more {
+    color: #cacaca;
+    font-family: 'Roboto';
+    background: #313131;
+    display: inline-block;
+    padding: 3px 10px;
+    margin: 6px 6px;
+    border-radius: 10px;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+#more:hover {
+    color: #dbdbdb;
+    background: #3d3d3d;
+    cursor: pointer;
+}
 .circle {
     position: absolute;
     background: #6f6f6f;
@@ -258,6 +274,35 @@ p.volume.value {
 /* Overlay hover */
 .next:hover, .previous:hover, .pause:hover, .play:hover, .up:hover, .down:hover {
     opacity: 1;
+}
+
+/* Overlay next playing */
+.overlay-next-playing {
+    position: fixed;
+    background: #1d1d1d;
+    min-width: 384px;
+    height: 340px;
+    width: 20%;
+    border-radius: 0px 0px 4px 4px;
+    animation: slide-in 0.9s forwards;
+    left: 50%;
+    top: 136px;
+    box-shadow: 3px 3px 8px #0000003d;
+    overflow: hidden;
+    margin-left: -394px;
+    z-index: -1;
+    display: none;
+}
+.overlay-next-playing h1 {
+    color: #dadada;
+    font-family: YT Sans, Roboto;
+    position: relative;
+    top: 16px;
+    margin: 0px 0px 0px 10px;
+    font-size: 24px;
+}
+#more {
+    display: none;
 }
 
 @keyframes slide-in {

@@ -116,9 +116,9 @@ ipcRenderer.on('request-song-data', function(){
             artistVar = artistVar.substr(57)
             artistVar = artistVar.substring(0, artistVar.length - 7);
         } else {
-            let artistVarAudioOnly = document.getElementsByClassName("byline-wrapper")[25].outerText
+            let artistVarAudioOnly = document.getElementsByClassName("middle-controls")[0].outerText
             if (artistVarAudioOnly.length > 85){
-                artistVarAudioOnly = artistVarAudioOnly.slice(0, -20) + '...'
+                artistVarAudioOnly = artistVarAudioOnly.slice(0, -82) + '...'
             }
             artistVar = artistVarAudioOnly
         }
@@ -168,7 +168,7 @@ ipcRenderer.on('request-volume-data', function(){
 ipcRenderer.on('request-time-data', function(){
     let rawTimestamp2 = document.querySelector(".time-info.ytmusic-player-bar").innerText;
     let timestamp = ''
-    if (rawTimestamp2.length > 10){ 
+    if (rawTimestamp2.length > 13){ 
         timestamp = rawTimestamp2.slice(0, -9) 
     } else {
         timestamp = rawTimestamp2.slice(0, -7);

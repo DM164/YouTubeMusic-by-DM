@@ -23,7 +23,7 @@ Coming soon `support canceled at the moment`
 #### Linux
 Coming soon `support canceled at the moment`
 
-![Home screen](https://i.imgur.com/KiNgRxu.png)
+![Home screen](https://imgur.com/ErKCtAV)
 
 ### Discord Rich Presence
 YouTube Music by DM integrates with Discord and shows to all of your friends what you currently are listening to.

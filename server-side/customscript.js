@@ -104,34 +104,41 @@ settingsTrigger.addEventListener('click', function(){
 });
 
 ipcRenderer.on('request-song-data', function(){
-        let rawTimestamp = document.querySelector(".time-info.ytmusic-player-bar").innerText;
-        endTimestamp = rawTimestamp.substr(7);
-
-        let titleVar = document.getElementsByClassName('title style-scope ytmusic-player-bar')[0].innerText
-        let artistVar = document.getElementsByClassName('byline style-scope ytmusic-player-bar')[0].innerHTML
-        let volumeVar = document.getElementById('expand-volume-slider').value
-        let thumbVar = document.getElementsByClassName('image style-scope ytmusic-player-bar')[0].src
-
-        if (artistVar.length < 85){
-            artistVar = artistVar.substr(57)
-            artistVar = artistVar.substring(0, artistVar.length - 7);
-        } else {
-            let artistVarAudioOnly = document.getElementsByClassName("middle-controls")[0].outerText
-            if (artistVarAudioOnly.length > 85){
-                artistVarAudioOnly = artistVarAudioOnly.slice(0, -82) + '...'
-            }
-            artistVar = artistVarAudioOnly
-        }
-
-        let data = {
-            artist: artistVar,
-            title: titleVar,
-            volume: volumeVar,
-            endTimestamp: endTimestamp,
-            thumb: thumbVar
-        }
-        ipcRenderer.send('requested-data', data);
+    sendData()
 });
+setInterval(() => {
+    sendData()
+}, 10000);
+    
+function sendData() {
+    let rawTimestamp = document.querySelector(".time-info.ytmusic-player-bar").innerText;
+    endTimestamp = rawTimestamp.substr(7);
+
+    let titleVar = document.getElementsByClassName('title style-scope ytmusic-player-bar')[0].innerText
+    let artistVar = document.getElementsByClassName('byline style-scope ytmusic-player-bar')[0].innerHTML
+    let volumeVar = document.getElementById('expand-volume-slider').value
+    let thumbVar = document.getElementsByClassName('image style-scope ytmusic-player-bar')[0].src
+
+    if (artistVar.length < 85){
+        artistVar = artistVar.substr(57)
+        artistVar = artistVar.substring(0, artistVar.length - 7);
+    } else {
+        let artistVarAudioOnly = document.getElementsByClassName("middle-controls")[0].outerText
+        if (artistVarAudioOnly.length > 85){
+            artistVarAudioOnly = artistVarAudioOnly.slice(0, 84) + '...'
+        }
+        artistVar = artistVarAudioOnly.slice(titleVar.length, artistVarAudioOnly.length)
+    }
+
+    let data = {
+        artist: artistVar,
+        title: titleVar,
+        volume: volumeVar,
+        endTimestamp: endTimestamp,
+        thumb: thumbVar
+    }
+    ipcRenderer.send('requested-data', data);
+};
 
 //Media control
 ipcRenderer.on('next-track-request', function(){

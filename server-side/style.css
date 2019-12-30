@@ -53,6 +53,14 @@ ytmusic-detail-header-renderer {
     background-image: url(https://www.dropbox.com/s/p2dz3n4e9xluddx/background-pattern.png?raw=1);
     background-size: contain;
 }
+#chips.ytmusic-chip-cloud-renderer {
+    margin-top: 14px;
+}
+ytmusic-chip-cloud-chip-renderer:not([chip-style="STYLE_PRIMARY"]):not([chip-style="STYLE_SECONDARY"]) a.ytmusic-chip-cloud-chip-renderer {
+    background: #171717;
+    --yt-endpoint-hover-color: #1f1f1f;
+    border: 1px solid #171717;
+}
 
 /* App settings */
 .appSettings {

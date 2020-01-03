@@ -369,7 +369,7 @@ function overlayToggle() {
 function createOverlay () {
   // Create the browser window.
   overlay = new BrowserWindow({
-    width: 100,
+    width: 900,
     height: 400,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -379,8 +379,7 @@ function createOverlay () {
     transparent: true,
     frame: false,
     skipTaskbar: true,
-    fullscreen: true,
-    resizable: false
+    fullscreen: true
   })
 
   overlay.loadFile('overlay.html');

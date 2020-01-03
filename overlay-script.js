@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron')
+const { ipcRenderer, remote } = require('electron')
 
 if (localStorage.getItem('first-time') === undefined){
     localStorage.setItem('theme', 'dark')

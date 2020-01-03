@@ -1,1 +1,1 @@
-localStorage.setItem('latestRelease', '1.1.0')
+localStorage.setItem('latestRelease', '2.0.0')

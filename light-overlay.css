@@ -268,6 +268,35 @@ p.volume.value {
     opacity: 1;
 }
 
+/* NEEDS TO BE STYLED FOR LIGHT MODE */
+/* Overlay next playing */
+.overlay-next-playing {
+    position: fixed;
+    background: #1d1d1d;
+    min-width: 384px;
+    height: 340px;
+    width: 20%;
+    border-radius: 0px 0px 4px 4px;
+    animation: slide-in 0.9s forwards;
+    left: 50%;
+    top: 136px;
+    box-shadow: 3px 3px 8px #0000003d;
+    overflow: hidden;
+    margin-left: -394px;
+    z-index: -1;
+    display: none;
+}
+.overlay-next-playing h1 {
+    color: #dadada;
+    font-family: YT Sans, Roboto;
+    position: relative;
+    top: 16px;
+    margin: 0px 0px 0px 10px;
+    font-size: 24px;
+}
+#more {
+    display: none;
+}
 
 @keyframes slide-in {
     0%{ transform: translateY(-800px); opacity: 0; }

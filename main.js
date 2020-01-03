@@ -36,7 +36,7 @@ ipcMain.on('send-DRPstatus', function(event, arg){
 })
 
 //Electron Client Version
-const ClientVersion = '1.1.0'
+const ClientVersion = '2.0.0'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -307,8 +307,8 @@ app.on('ready', () =>{
   tray.setContextMenu(contextMenu)
 
   //Build menu from template
-  // const topMenu = Menu.buildFromTemplate(mainMenuTemplate);
-  // Menu.setApplicationMenu(topMenu)
+  const topMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  Menu.setApplicationMenu(topMenu)
 })
 
 function createNewPresence() {

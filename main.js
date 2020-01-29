@@ -66,8 +66,8 @@ function createSplash() {
     splash.show()
   })
 
-  mainWindow.once('ready-to-show', async () => {
-    await mainWindow.webContents.executeJavaScript(`
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.webContents.executeJavaScript(`
       
     const topBarJS = document.createElement('script');
     topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/dhoar8i0zkhhhd4/topBar.js?dl=0')
@@ -88,15 +88,13 @@ function createSplash() {
     stylesheet.setAttribute("rel", "stylesheet");
     stylesheet.setAttribute("href", "https://dl.dropbox.com/s/sgb2h7emq0uk8y4/style.css?dl=0");
     document.querySelector('head').appendChild(stylesheet);
-    `).then( () => {
+    `)
       setTimeout(() => {
         mainWindow.show()
         splash.close();
         splash = null;
       }, 1000);
-    }).catch( (error) => {
-      console.log(error)
-    })
+
   })
   ipcMain.on('versionCheck:splash', () => {
     splash.webContents.send('versionCheckAnswer', ClientVersion)
@@ -315,8 +313,8 @@ app.on('ready', () =>{
   tray.setContextMenu(contextMenu)
 
   //Build menu from template
-  const topMenu = Menu.buildFromTemplate(mainMenuTemplate);
-  Menu.setApplicationMenu(topMenu)
+  // const topMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  // Menu.setApplicationMenu(topMenu)
 })
 
 function createNewPresence() {

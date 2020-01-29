@@ -1,16 +1,7 @@
+const { ipcRenderer, remote } = require('electron')
+
 //checks the value the first time you open the settings
 checkDRPValue()
-
-//Closes settings when you click outside the settings window
-document.getElementById('AS1').addEventListener('click', function(){
-    document.querySelector('.appSettingsWindow').style.display='block'
-    document.querySelector('.dimm').style.display='block'
-})
-
-document.getElementById('dimmB').addEventListener('click', function(){
-    document.querySelector('.appSettingsWindow').style.display = 'none'
-    document.querySelector('.dimm').style.display = 'none'
-})
 
 //DRP functionality
 let DRPvalue = localStorage.getItem('DRP');
@@ -35,3 +26,13 @@ function checkDRPValue(){
         document.querySelector('.DRPindicator').setAttribute('class', 'DRPindicator DRPactive');
     }
 }
+
+//Buttons on Top Bar
+document.getElementById("closeApp").addEventListener("click", function(){
+    const window = remote.getCurrentWindow();
+    window.hide();
+});
+document.getElementById("minimizeApp").addEventListener("click", function (e) {
+    const window = remote.getCurrentWindow();
+    window.minimize(); 
+});

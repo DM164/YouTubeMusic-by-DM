@@ -1,7 +1,7 @@
 {
   "name": "youtube-music-by-dm",
   "productName": "YouTube Music by DM",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Desktop app built with electron for the YT Music service.",
   "main": "main.js",
   "scripts": {
@@ -9,7 +9,6 @@
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
     "package-win": "electron-packager . \"YouTube Music by DM\" --overwrite --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=\"Grandpa Mining\" --version-string.FileDescription=\"Desktop app built with electron for the YT Music service.\" --version-string.ProductName=\"YouTube Music App\"",
     "package-linux": "electron-packager .  \"YouTube Music by DM\" --overwrite --executableName=youtube-music-by-dm --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/icon.png --prune=true --out=release-builds",
-
     "setup": "electron-installer-windows --src \"release-builds/YouTube Music by DM-win32-ia32/\" --dest installers/win/ --options.exe \"YouTube Music by DM.exe\" --options.icon assets/icons/win/icon.ico",
     "setup-mac": "electron-installer-dmg \"release-builds/YouTube Music by DM-win32-ia32/\" \"YouTube Music by DM\"",
     "setup-debian": "electron-installer-debian --src \"release-builds/YouTube Music by DM-linux-x64/\" --config debian.json --arch amd64"
@@ -18,7 +17,7 @@
   "author": "Denis Mignanelli",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^5.0.8",
+    "electron": "^5.0.13",
     "electron-installer-dmg": "^3.0.0",
     "electron-packager": "^14.0.4"
   },

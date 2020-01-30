@@ -1,42 +1,5 @@
 <!DOCTYPE html>
 <html>
-<<<<<<< HEAD
-
-<head>
-  <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="splashscreen.css">
-  <link rel="stylesheet" href="reset.css">
-  <title>YouTube Music</title>
-  <script>
-    const { ipcRenderer } = require('electron')
-
-    //Checks if the client is up to date or not
-    checkClientVersion()
-    function checkClientVersion() {
-      ipcRenderer.send('versionCheck:splash')
-      ipcRenderer.on('versionCheckAnswer', function (event, arg) {
-        localStorage.setItem('localVersion', arg)
-      })
-    }
-  </script>
-</head>
-
-<body>
-  <img src="./assets/splashscreen/splashscreenWP.png" class="SSbackground">
-  <div class="logo-div">
-    <img class="logo" src="assets/icons/png/icon.png" alt="YTMusic logo">
-  </div>
-  <div class="text-container">
-    <h1 class="greetings">Welcome!</h1>
-    <h4 class="info">YouTube Music by DM</h4>
-  </div>
-</body>
-<script>
-  document.getElementsByClassName('info')[0].innerText = `YouTube Music by DM v${localStorage.getItem('localVersion')}`
-</script>
-</html>
-=======
   <head>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
@@ -51,8 +14,7 @@
     </div>
     <div class="text-container">
       <h1 class="greetings">Welcome!</h1>
-      <h4 class="info">YouTube Music by DM v. 1.1.0</h4>
+      <h4 class="info">YouTube Music by DM v. 2.0.0</h4>
     </div>
   </body>
 </html>
->>>>>>> parent of 2aa1211... 2.0.0 patch

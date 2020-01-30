@@ -335,8 +335,8 @@ app.on('ready', () => {
   tray.setContextMenu(contextMenu)
 
   //Build menu from template
-  // const topMenu = Menu.buildFromTemplate(mainMenuTemplate);
-  // Menu.setApplicationMenu(topMenu)
+  const topMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  Menu.setApplicationMenu(topMenu)
 })
 
 function createNewPresence() {

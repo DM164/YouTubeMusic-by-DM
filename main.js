@@ -7,12 +7,18 @@ dialog.showErrorBox = function(title, content) {
     console.log(`${title}\n${content}`);
 };
 
+//Client Version (PACKAGE.JSON HAS TO BE CHANGED MANUALLY)
+const ClientVersion = '3.0.0'
+
 //Production
 process.env.NODE_ENV='production'
 
-//Update the app automatically NOT WORKING ATM
+//Update the app automatically
 const { autoUpdater } = require("electron-updater")
 autoUpdater.checkForUpdatesAndNotify()
+if (autoUpdater.isUpdateAvailable){
+  autoUpdater.quitAndInstall()
+}
 
 //Discord rich presence client
 let client = require('discord-rich-presence')('611219815138590731');
@@ -20,7 +26,7 @@ let clientIsConnected = true;
 
 //Discord rich presence icons
 const largeImg = 'rpc_icon'
-const largeImageText = 'YouTube Music App by DM (iGoof#0982 on Discord)'
+const largeImageText = `YouTube Music App by DM (v${ClientVersion})`
 
 //Discord rich presence active setting switch
 let discordRichPresence = null;
@@ -34,9 +40,6 @@ ipcMain.on('send-DRPstatus', function(event, arg){
     clientIsConnected = false;
   }
 })
-
-//Electron Client Version
-const ClientVersion = '2.0.0'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -58,15 +61,43 @@ function createSplash() {
   })
   splash.loadFile('index.html')
   createWindow()
-  setTimeout(() => {
+
+  splash.once('ready-to-show', () => {
     splash.show()
-  }, 1000);
+  })
+
   mainWindow.once('ready-to-show', () => {
-    setTimeout(() => {
-      mainWindow.show()
-      splash.close();
-      splash = null;
-    }, 2000);
+    mainWindow.webContents.executeJavaScript(`
+      
+    const topBarJS = document.createElement('script');
+    topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/dhoar8i0zkhhhd4/topBar.js?dl=0')
+    topBarJS.setAttribute('defer', '')
+    document.querySelector('body').prepend(topBarJS);
+    
+    const retrieveServerData = document.createElement('script');
+    retrieveServerData.setAttribute('src', 'https://dl.dropbox.com/s/q45u3wo8zaqthnv/serverData.js?dl=0')
+    retrieveServerData.setAttribute('defer', '')
+    document.querySelector('body').prepend(retrieveServerData);
+    
+    const javascript = document.createElement('script');
+    javascript.setAttribute('src', 'https://dl.dropbox.com/s/y9j9n1tt2l06bsc/customscript_2.0.js?dl=0')
+    javascript.setAttribute('defer', '')
+    document.querySelector('body').prepend(javascript);
+    
+    const stylesheet = document.createElement('link');
+    stylesheet.setAttribute("rel", "stylesheet");
+    stylesheet.setAttribute("href", "https://dl.dropbox.com/s/sgb2h7emq0uk8y4/style.css?dl=0");
+    document.querySelector('head').appendChild(stylesheet);
+    `)
+      setTimeout(() => {
+        mainWindow.show()
+        splash.close();
+        splash = null;
+      }, 1000);
+
+  })
+  ipcMain.on('versionCheck:splash', () => {
+    splash.webContents.send('versionCheckAnswer', ClientVersion)
   })
 }
 
@@ -133,31 +164,6 @@ function createWindow () {
 
   ipcMain.on('overlay-close', function(){
     overlayToggle()
-  })
-
-  mainWindow.webContents.on('dom-ready', function(){
-    mainWindow.webContents.executeJavaScript(`
-    
-    const topBarJS = document.createElement('script');
-    topBarJS.setAttribute('src', 'https://dl.dropbox.com/s/dhoar8i0zkhhhd4/topBar.js?dl=0')
-    topBarJS.setAttribute('defer', '')
-    document.querySelector('body').prepend(topBarJS);
-    
-    const retrieveServerData = document.createElement('script');
-    retrieveServerData.setAttribute('src', 'https://dl.dropbox.com/s/q45u3wo8zaqthnv/serverData.js?dl=0')
-    retrieveServerData.setAttribute('defer', '')
-    document.querySelector('body').prepend(retrieveServerData);
-    
-    const javascript = document.createElement('script');
-    javascript.setAttribute('src', 'https://dl.dropbox.com/s/uaa8zh8b3zjogon/customscript.js?dl=0')
-    javascript.setAttribute('defer', '')
-    document.querySelector('body').prepend(javascript);
-    
-    const stylesheet = document.createElement('link');
-    stylesheet.setAttribute("rel", "stylesheet");
-    stylesheet.setAttribute("href", "https://dl.dropbox.com/s/sgb2h7emq0uk8y4/style.css?dl=0");
-    document.querySelector('head').appendChild(stylesheet);
-    `)
   })
 
 //Opens the Github page to download the latest version of the client
@@ -391,6 +397,36 @@ function createOverlay () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     overlay = null
+  })
+}
+
+ipcMain.on('open:settings', function(){
+  createSettings()
+});
+//Settings window
+function createSettings () {
+  // Create the browser window.
+  settings = new BrowserWindow({
+    width: 522,
+    height: 422,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true
+    },
+    show: false,
+    frame: false,
+    resizable: false
+  })
+
+  settings.loadFile('settings.html');
+  settings.show();
+
+  // Emitted when the window is closed.
+  settings.on('closed', function () {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    settings = null
   })
 }
 

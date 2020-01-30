@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Settings</title>
+    <link rel="stylesheet" href="server-side/style.css">
+    <link rel="stylesheet" href="dark-overlay.css">
+    <link rel="stylesheet" href="reset.css">
+    <link href="https://fonts.googleapis.com/css?family=YT+Sans:500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap" rel="stylesheet">
+    <script src="settings-local.js" defer></script>
+
+    <style>
+        .topBar {
+            background: #212121;
+            height: 22px;
+            position: fixed;
+            z-index: 100;
+            width: 100% !important;
+            -webkit-app-region: drag;
+            pointer-events: none;
+            right: 0px !important;
+        }
+
+        #closeApp {
+            background: #212121;
+        }
+
+        #minimizeApp {
+            border-radius: 0px;
+            right: 26px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topBar">
+        <div class="title-settings">
+            <img src="./assets/tray/tray-title-icon.png">
+            <p>Settings</p>
+        </div>
+        <button id="closeApp"><img src="assets/closeApp.png"></button>
+        <button id="minimizeApp"><img src="assets/minimizeApp.png"></button>
+    </div>
+
+    <div class="appSettingsWindow" style="display: block;">
+        <div class="DRPContainer">
+            <h2 class="DPRTitle">Discord Rich Presence</h2>
+            <p class="DRPDesc">Turn off Discord Rich Presence by default. (Requires a restart)</p>
+            <div class="DRPSwitch">
+                <div class="DRPindicator DRPactive"></div>
+            </div>
+        </div>
+        <!-- <div class="line1"></div> -->
+        <table class="hotkeys">
+            <thead>
+            <tr>
+            <th>Keys</th>
+            <th>Function</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+            <td><code>ALT</code> + <code>1</code></td>
+            <td>Open the overlay</td>
+            </tr>
+            <tr>
+            <td><code>CTRL</code> or <code>CMD</code> + <code>Q</code></td>
+            <td>Quit the app</td>
+            </tr>
+            <tr>
+            <td><code>Play/Pause</code></td>
+            <td>Well... you know</td>
+            </tr>
+            <tr>
+            <td><code>Skip</code></td>
+            <td>You know this one too...</td>
+            </tr>
+            <tr>
+            <td><code>Previous</code></td>
+            <td>Yep, it does exactly what it says</td>
+            </tr>
+            <tr>
+            <td><code>CTRL</code> or <code>CMD</code> + <code>KEYUP</code></td>
+            <td>Volume up</td>
+            </tr>
+            <tr>
+            <td><code>CTRL</code> or <code>CMD</code> + <code>KEYDOWN</code></td>
+            <td>Volume down</td>
+            </tr>
+            </tbody>
+            </table>
+    </div>
+</body>
+
+</html>

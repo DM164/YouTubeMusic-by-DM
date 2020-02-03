@@ -71,16 +71,16 @@ function sendData() {
     let volumeVar = document.getElementById('expand-volume-slider').value
     let thumbVar = document.getElementsByClassName('image style-scope ytmusic-player-bar')[0].src
 
-    // if (artistVar.length < 85) {
-    //     artistVar = artistVar.substr(57)
-    //     artistVar = artistVar.substring(0, artistVar.length - 7);
-    // } else {
-    //     let artistVarAudioOnly = document.getElementsByClassName("middle-controls")[0].outerText
-    //     if (artistVarAudioOnly.length > 85) {
-    //         artistVarAudioOnly = artistVarAudioOnly.slice(0, 84) + '...'
-    //     }
-    //     artistVar = artistVarAudioOnly.slice(titleVar.length, artistVarAudioOnly.length)
-    // }
+    if (artistVar.length < 85) {
+        artistVar = artistVar.substr(57)
+        artistVar = artistVar.substring(0, artistVar.length - 7);
+    } else {
+        let artistVarAudioOnly = document.getElementsByClassName("middle-controls")[0].outerText
+        if (artistVarAudioOnly.length > 85) {
+            artistVarAudioOnly = artistVarAudioOnly.slice(0, 84) + '...'
+        }
+        artistVar = artistVarAudioOnly.slice(titleVar.length, artistVarAudioOnly.length)
+    }
 
     let data = {
         artist: artistVar,

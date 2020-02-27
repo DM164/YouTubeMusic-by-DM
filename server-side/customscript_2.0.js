@@ -71,7 +71,7 @@ function sendData() {
     let volumeVar = document.getElementById('expand-volume-slider').value
     let thumbVar = document.getElementsByClassName('image style-scope ytmusic-player-bar')[0].src
 
-    if (artistVar.length < 85) {
+    if (artistVar.length > 85) {
         artistVar = artistVar.substr(57)
         artistVar = artistVar.substring(0, artistVar.length - 7);
     } else {

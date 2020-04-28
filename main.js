@@ -8,7 +8,7 @@ dialog.showErrorBox = function (title, content) {
 };
 
 //Client Version (PACKAGE.JSON HAS TO BE CHANGED MANUALLY)
-const ClientVersion = '3.0.0'
+const ClientVersion = '3.0.1'
 
 //Production
 process.env.NODE_ENV = 'production'
